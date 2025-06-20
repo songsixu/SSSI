@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <h1>欢迎来到 sixu.art</h1>
+    <h1>欢迎</h1>
     <p>你好～</p >
     <p>（试验）</p >
 </body>
