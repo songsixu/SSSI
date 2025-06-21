@@ -7,7 +7,6 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
   if (file) {
     // 生成临时路径（可直接用于页面展示）
     const imgPath = URL.createObjectURL(file);
-    console.log('C:\Users\Administrator.WIN-4T4O7S7USQ8\Pictu', imgPath);
+    console.log('C:\\Users\\Administrator.WIN-4T4O7S7USQ8\\Pictu', imgPath);
   }
 });
-background - image: urlC:\Users\Administrator.WIN-4T4O7S7USQ8\Pictu
