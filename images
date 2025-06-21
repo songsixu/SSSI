@@ -1,12 +1,3 @@
-// HTML
-<input type="file" id="imageInput" accept="image/*">
-
-// JavaScript
-document.getElementById('imageInput').addEventListener('change', function(e) {
-  const file = e.target.files[0];
-  if (file) {
-    // 生成临时路径（可直接用于页面展示）
-    const imgPath = URL.createObjectURL(file);
-    console.log('C:\\Users\\Administrator.WIN-4T4O7S7USQ8\\Pictu', imgPath);
-  }
-});
+body 
+  background: linear-gradient(to right, #FFECB3, #FFCCBC); 
+}
