@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    /* 给 body 加背景，让整页显示 */
-  <image>  body {
-      background-image: url("C:\Users\Administrator.WIN-4T4O7S7USQ8\Pictures\Screenshots"); 
-      background-repeat: no-repeat;
-      background-size: cover; 
-      min-height: 100vh; /* 保证页面有高度，背景才显示 */
-    }
-  </style>
-</head>
-<body>
-  <!-- 这里放内容，比如文字、按钮 -->
-  <h1>煦煦宝贝</h1>
-</body>
-</html>
+// HTML
+<input type="file" id="imageInput" accept="image/*">
+
+// JavaScript
+document.getElementById('imageInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    // 生成临时路径（可直接用于页面展示）
+    const imgPath = URL.createObjectURL(file);
+    console.log('图片路径：C:\Users\Administrator.WIN-4T4O7S7USQ8\Pictu', imgPath);
+  }
+});
