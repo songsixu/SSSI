@@ -1,8 +1,18 @@
+<!DOCTYPE html>
+<html>
 <head>
   <style>
-    body {
-      background-image: url("bg-main.png");
+    /* 给 body 加背景，让整页显示 */
+  <image>  body {
+      background-image: url("C:\Users\Administrator.WIN-4T4O7S7USQ8\Pictures\Screenshots"); 
       background-repeat: no-repeat;
+      background-size: cover; 
+      min-height: 100vh; /* 保证页面有高度，背景才显示 */
     }
   </style>
 </head>
+<body>
+  <!-- 这里放内容，比如文字、按钮 -->
+  <h1>煦煦宝贝</h1>
+</body>
+</html>
