@@ -1,0 +1,8 @@
+<head>
+  <style>
+    body {
+      background-image: url("bg-main.png");
+      background-repeat: no-repeat;
+    }
+  </style>
+</head>
