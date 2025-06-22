@@ -1,23 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>我的第一个网页</title>
-    <style>
-        body { 
-            background: linear-gradient(to right, #FFECB3, #FFCCBC); 
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>按钮变游戏</title>
+  <style>
+    #testBtn {
+      padding: 15px 30px;
+      font-size: 20px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    #gameCanvas {
+      display: none; 
+      border: 2px solid #333;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <button id="myBtn">点我试试</button>
-    <script>
-        document.getElementById("myBtn").onclick = function() {
-            alert("你点击啦！"); 
-        };
-    </script>
+  <button id="testBtn">点我开游戏</button>
+  <canvas id="gameCanvas" width="300" height="400"></canvas>
+
+  <script>
+    const btn = document.getElementById('testBtn');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let isGameActive = false;
+    let ballX = 150, ballY = 350;
+    let ballSpeedX = 3, ballSpeedY = -3;
+    let paddleX = 120;
+    const paddleWidth = 60, paddleHeight = 10;
+    const blocks = [];
+
+    // 初始化方块（简单“打砖块”逻辑）
+    function initBlocks() {
+      blocks.length = 0;
+      for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < 5; x++) {
+          blocks.push({
+            x: x * 60 + 10,
+            y: y * 30 + 20,
+            width: 50,
+            height: 20,
+            alive: true
+          });
+        }
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      if (!isGameActive) {
+        isGameActive = true;
+        canvas.style.display = 'block';
+        initBlocks();
+        requestAnimationFrame(gameLoop);
+        // 监听鼠标控制 paddle
+        canvas.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          paddleX = e.clientX - rect.left - paddleWidth / 2;
+          paddleX = Math.max(0, Math.min(paddleX, canvas.width - paddleWidth));
+        });
+      }
+    });
+
+    function gameLoop() {
+      if (!isGameActive) return;
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function update() {
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+
+      // 碰撞墙壁
+      if (ballX < 0 || ballX > canvas.width) ballSpeedX *= -1;
+      if (ballY < 0) ballSpeedY *= -1;
+
+      // 碰撞 paddle
+      if (ballY + 5 > canvas.height - paddleHeight && 
+          ballY < canvas.height && 
+          ballX > paddleX && 
+          ballX < paddleX + paddleWidth) {
+        ballSpeedY *= -1;
+      }
+
+      // 碰撞方块
+      blocks.forEach(block => {
+        if (block.alive && 
+            ballX + 5 > block.x && 
+            ballX < block.x + block.width && 
+            ballY + 5 > block.y && 
+            ballY < block.y + block.height) {
+          block.alive = false;
+          ballSpeedY *= -1;
+        }
+      });
+
+      // 游戏结束（球落地）
+      if (ballY > canvas.height) {
+        isGameActive = false;
+        alert('游戏结束！重新点击按钮再来～');
+        canvas.style.display = 'none';
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // 画球
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, 5, 0, Math.PI * 2);
+      ctx.fillStyle = 'blue';
+      ctx.fill();
+      // 画 paddle
+      ctx.fillStyle = 'black';
+      ctx.fillRect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+      // 画方块
+      blocks.forEach(block => {
+        if (block.alive) {
+          ctx.fillStyle = 'red';
+          ctx.fillRect(block.x, block.y, block.width, block.height);
+        }
+      });
+    }
+  </script>
 </body>
 </html>
-
 <div style="text-align:center">  
   <h1>🌞 煦煦建设中</h1>  
   <svg width="100" height="100" viewBox="0 0 100 100">  
