@@ -12,6 +12,40 @@
     </style>
 </head>
 <body>
-    <!-- 这里可以添加内容，比如文字、按钮等，暂时先空着看背景效果 -->
+    <!-- 呜呜呜 -->
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .sun {
+            font-size: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="sun" onclick="this.innerHTML='🌞💥';setTimeout(()=>{this.innerHTML='🌞';},1000)">
+        🌞
+    </div>
 </body>
 </html>
