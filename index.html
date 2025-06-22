@@ -3,15 +3,18 @@
 <head>
     <title>我的第一个网页</title>
     <style>
-        /* 把背景渐变样式写这里，body 标签会应用这个背景 */
         body { 
             background: linear-gradient(to right, #FFECB3, #FFCCBC); 
         }
     </style>
 </head>
 <body>
-    <h1>你好呀！</h1>
-    <p>I love you~</p >
+    <button id="myBtn">点我试试</button>
+    <script>
+        document.getElementById("myBtn").onclick = function() {
+            alert("你点击啦！"); 
+        };
+    </script>
 </body>
 </html>
 
