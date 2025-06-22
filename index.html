@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Emoji 小太阳+彩虹</title>
     <style>
-        body {
+    body {
             /* 你的渐变背景 */
             background: linear-gradient(to right, #FFECB3, #FFCCBC); 
             /* 让内容居中 */
@@ -65,3 +65,35 @@
     <div class="sun">🌞</div>
 </body>
 </html>
+<script>
+  let sunCount = 0;
+  const sun = document.querySelector('.sun');
+  sun.addEventListener('click', () => {
+    sunCount++;
+    // 点击后太阳放大+抖动
+    sun.style.transform = 'scale(1.2) rotate(10deg)';
+    setTimeout(() => {
+      sun.style.transform = 'scale(1) rotate(0deg)';
+    }, 300);
+    // 显示点击次数（可以做个小弹窗或数字飘出）
+    alert(`已收集太阳贴纸 ${sunCount} 次～`);
+  });
+</script>
+</body>
+</html>
+<!-- HTML 里给彩虹加 draggable 属性 -->
+<div class="rainbow" draggable="true" ondragstart="drag(event)"></div>
+<div class="sun" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+<script>
+  function allowDrop(e) { e.preventDefault(); }
+  function drag(e) { e.dataTransfer.setData("text", e.target.id); }
+  function drop(e) {
+    e.preventDefault();
+    // 彩虹拖到太阳上，播放特效
+    document.body.innerHTML += '<div class="heart">💖</div>';
+    setTimeout(() => {
+      document.querySelector('.heart').remove();
+    }, 1000);
+  }
+</script>
