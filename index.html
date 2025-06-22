@@ -1,34 +1,104 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <title>治愈小太阳+彩虹</title>
     <style>
         body {
-            background: #000;
+            background: linear-gradient(to right, #FFECB3, #FFCCBC); 
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            overflow: hidden; 
+            position: relative; /* 给彩虹伪元素做定位参考 */
         }
+
         .sun {
-            font-size: 100px;
-            cursor: pointer;
-            animation: 
-                spin 0.5s linear infinite,
-                rainbow 1s linear infinite;
+            width: 100px; 
+            height: 100px;
+            border-radius: 50%; 
+            background-color: #FFD700; 
+            box-shadow: 0 0 50px #FFD700; 
+            position: relative; 
+            animation: rotate 10s infinite linear; 
+            cursor: pointer; 
+            z-index: 1; /* 让太阳在彩虹上层 */
         }
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
+
+        .sun::before,
+        .sun::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 20px solid transparent;
+            border-bottom-color: #FFD700; 
         }
-        @keyframes rainbow {
-            100% { filter: hue-rotate(360deg); }
+
+        .sun::before {
+            top: -30px;
+            left: 30px;
+            transform: rotate(90deg);
+        }
+
+        .sun::after {
+            bottom: -30px;
+            left: 30px;
+            transform: rotate(-90deg);
+        }
+
+        .sun span {
+            position: absolute;
+            width: 20px;
+            height: 100px;
+            background-color: #FFD700;
+            border-radius: 10px;
+        }
+
+        .sun span:nth-child(1) {
+            left: -20px;
+            top: 0;
+            transform: rotate(90deg);
+        }
+
+        .sun span:nth-child(2) {
+            right: -20px;
+            top: 0;
+            transform: rotate(90deg);
+        }
+
+        /* 彩虹样式：用伪元素做半圆弧彩虹 */
+        body::after {
+            content: "";
+            position: absolute;
+            /* 彩虹宽度 */
+            width: 300px; 
+            /* 彩虹高度（半圆半径） */
+            height: 150px; 
+            /* 让彩虹底部对齐太阳 */
+            bottom: 20%; 
+            left: 50%;
+            transform: translateX(-50%);
+            /* 彩虹渐变颜色：红橙黄绿青蓝紫 */
+            background: linear-gradient(45deg, #ff0000, #ffa500, #ffff00, #008000, #00ffff, #0000ff, #800080);
+            /* 裁剪成半圆 */
+            clip-path: ellipse(50% 50% at 50% 50%);
+            opacity: 0.8; /* 稍微透明更柔和 */
+            z-index: 0; /* 让彩虹在太阳下层 */
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="sun" onclick="this.innerHTML='🌞💥';setTimeout(()=>{this.innerHTML='🌞';},300)">
-        🌞
+    <div class="sun">
+        <span></span>
+        <span></span>
     </div>
 </body>
 </html>
