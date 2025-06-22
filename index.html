@@ -3,43 +3,32 @@
 <head>
     <style>
         body {
-            background: #FFECB3, #FFCCBC；
-            display:  flex;
+            background: #000;
+            display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: " flex", serif;
+            overflow: hidden;
         }
         .sun {
-            font-size: 120px;
+            font-size: 100px;
             cursor: pointer;
-            animation: gentle 4s ease-in-out infinite;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: 
+                spin 0.5s linear infinite,
+                rainbow 1s linear infinite;
         }
-        @keyframes gentle {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.05); }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
         }
-        .poem {
-            position: absolute;
-            bottom: 20%;
-            font-size: 18px;
-            color: #8B4513;
-            opacity: 0;
-            transition: opacity 1s;
+        @keyframes rainbow {
+            100% { filter: hue-rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="sun" onclick="showPoem()">🌞</div>
-    <div class="poem" id="poem">慢品人间煦色<br>闲观万物生长</div>
-
-    <script>
-        function showPoem() {
-            const poem = document.getElementById('poem');
-            poem.style.opacity = poem.style.opacity == 1 ? 0 : 1;
-        }
-    </script>
+    <div class="sun" onclick="this.innerHTML='🌞💥';setTimeout(()=>{this.innerHTML='🌞';},300)">
+        🌞
+    </div>
 </body>
 </html>
