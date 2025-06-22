@@ -2,98 +2,160 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Emoji 小太阳+彩虹</title>
+    <title>sun~</title>
     <style>
-    body {
-            /* 你的渐变背景 */
-            background: linear-gradient(to right, #FFECB3, #FFCCBC); 
-            /* 让内容居中 */
-            display: flex; 
-            /* 垂直+水平居中 */
-            justify-content: center; 
-            align-items: center; 
-            /* 占满浏览器高度 */
-            height: 100vh; 
-            /* 清除默认边距 */
-            margin: 0; 
-            /* 让页面更清爽 */
-            overflow: hidden; 
+        /* 基础布局：柔性居中 + 渐变背景 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            /* 初始背景：温暖阳光 */
+            background: linear-gradient(120deg, #FFECB3, #FFCCBC);
+            /* 动画过渡更丝滑 */
+            transition: all 0.5s ease; 
+            overflow: hidden; /* 防止花瓣溢出 */
         }
 
-        /* 小太阳容器（用 emoji 实现） */
+        /* 太阳贴纸：可拖拽+点击 */
         .sun {
-            /* 超大 emoji ，可调整大小 */
-            font-size: 80px; 
-            /* 让彩虹在太阳下方 */
-            position: relative; 
-            /* 给鼠标悬浮加互动（可选） */
-            cursor: pointer; 
-            /* 让太阳微微跳动（可爱细节） */
-            animation: bounce 2s infinite ease-in-out; 
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            /* 替换成你截图里的太阳贴纸路径！ */
+            background: url('🌞') no-repeat center/cover;
+            position: absolute;
+            top: 30%;
+            left: 40%;
+            /* 贴纸阴影+发光 */
+            box-shadow: 0 0 20px rgba(255,215,0,0.8);
+            /* 悬浮放大动画 */
+            transition: transform 0.3s;
+        }
+        .sun:hover { transform: scale(1.1); }
+
+        /* 彩虹贴纸：可拖拽+点击 */
+        .rainbow {
+            width: 80px;
+            height: 60px;
+            cursor: pointer;
+            /* 替换成你截图里的彩虹贴纸路径！ */
+            background: url('rainbow-sticker.png') no-repeat center/cover;
+            position: absolute;
+            top: 50%;
+            left: 55%;
+            box-shadow: 0 0 20px rgba(255,105,180,0.6);
+            transition: transform 0.3s;
+        }
+        .rainbow:hover { transform: scale(1.1); }
+
+        /* 花瓣/彩虹碎片掉落样式 */
+        .petal {
+            position: absolute;
+            width: 15px;
+            height: 20px;
+            background: pink;
+            border-radius: 50% 50% 0 0;
+            animation: fall 3s linear;
+            z-index: -1; /* 放在贴纸下层 */
+        }
+        .rainbow-shard {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(45deg, #ff0000, #ffff00, #00ff00, #0000ff);
+            border-radius: 50%;
+            animation: fall 2s linear;
+            z-index: -1;
         }
 
-        /* 彩虹用伪元素 + emoji ，简单粗暴！ */
-        .sun::after {
-            content: "🌈"; 
-            /* 彩虹大小 */
-            font-size: 40px; 
-            /* 放在太阳下方 */
-            position: absolute; 
-            bottom: -60px; 
-            left: 50%; 
-            /* 水平居中 */
-            transform: translateX(-50%); 
-            /* 彩虹微微摆动 */
-            animation: swing 3s infinite ease-in-out; 
+        /* 掉落动画 */
+        @keyframes fall {
+            to { transform: translateY(110vh); }
         }
 
-        /* 太阳跳动动画 */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        /* 日夜模式背景 */
+        body.night {🌙
+            background: linear-gradient(120deg, #2b2b4b, #000);
+        }
+        body.night .sun {
+            /* 替换成月亮贴纸路径！ */
+            background: url('🌞') no-repeat center/cover;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
 
-        /* 彩虹摆动动画 */
-        @keyframes swing {
-            0%, 100% { transform: translateX(-50%) rotate(0deg); }
-            50% { transform: translateX(-50%) rotate(10deg); }
+        /* 晴天/雨后背景 */
+        body.rainy {🌧️
+            background: linear-gradient(120deg, #b3d8ff, #fff);
         }
     </style>
 </head>
 <body>
-    <!-- 小太阳用 emoji 🌞 ，可换成你喜欢的太阳表情！ -->
-    <div class="sun">🌞</div>
-</body>
-</html>
-<script>
-  let sunCount = 0;
-  const sun = document.querySelector('.sun');
-  sun.addEventListener('click', () => {
-    sunCount++;
-    // 点击后太阳放大+抖动
-    sun.style.transform = 'scale(1.2) rotate(10deg)';
-    setTimeout(() => {
-      sun.style.transform = 'scale(1) rotate(0deg)';
-    }, 300);
-    // 显示点击次数（可以做个小弹窗或数字飘出）
-    alert(`已收集太阳贴纸 ${sunCount} 次～`);
-  });
-</script>
-</body>
-</html>
-<!-- HTML 里给彩虹加 draggable 属性 -->
-<div class="rainbow" draggable="true" ondragstart="drag(event)"></div>
-<div class="sun" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div class="🌞" id="🌞"></div>
+    <div class="🌧️" id="🌧️"></div>
 
-<script>
-  function allowDrop(e) { e.preventDefault(); }
-  function drag(e) { e.dataTransfer.setData("text", e.target.id); }
-  function drop(e) {
-    e.preventDefault();
-    // 彩虹拖到太阳上，播放特效
-    document.body.innerHTML += '<div class="heart">💖</div>';
-    setTimeout(() => {
-      document.querySelector('.heart').remove();
-    }, 1000);
-  }
-</script>
+    <script>
+        // 点击计数+花瓣掉落
+        let sunCount = 0;
+        const sun = document.getElementById('🌞');
+        sun.addEventListener('click', () => {
+            sunCount++;
+            // 弹窗提示（改成更炫酷的数字飘出效果更好，这里先简化）
+            alert(`已收集太阳贴纸 ${sunCount} 次～`);
+            
+            // 掉落花瓣
+            for (let i=0; i<10; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = Math.random()*100 + 'vw';
+                petal.style.animationDuration = Math.random()*2 + 1 + 's';
+                document.body.appendChild(petal);
+                setTimeout(() => petal.remove(), 3000);
+            }
+
+            // 10次点击触发彩蛋：日夜切换
+            if (sunCount % 10 === 0) {
+                document.body.classList.toggle('🌙');
+                alert('触发日夜切换！夜晚模式已开启～');
+            }
+        });
+
+        // 彩虹点击：彩虹雨+天气切换
+        const rainbow = document.getElementById('🌈');
+        rainbow.addEventListener('click', () => {
+            // 掉落彩虹碎片
+            for (let i=0; i<15; i++) {
+                const shard = document.createElement('div');
+                shard.className = 'rainbow-shard';
+                shard.style.left = Math.random()*100 + 'vw';
+                shard.style.animationDuration = Math.random()*1.5 + 1 + 's';
+                document.body.appendChild(shard);
+                setTimeout(() => shard.remove(), 2000);
+            }
+
+            // 切换雨后背景
+            document.body.classList.toggle('🌧️');
+            const isRainy = document.body.classList.contains('🌧️');
+            alert(isRainy ? '下雨啦～雨后见彩虹！' : '雨停啦～回到晴天～');
+        });
+
+        // 高级玩法：拖拽贴纸（简单版）
+        let dragTarget = null;
+        document.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('🌞') || e.target.classList.contains('rainbow')) {
+                dragTarget = e.target;
+            }
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (dragTarget) {
+                dragTarget.style.top = e.clientY - 60 + 'px';
+                dragTarget.style.left = e.clientX - 40 + 'px';
+            }
+        });
+        document.addEventListener('mouseup', () => {
+            dragTarget = null;
+        });
+    </script>
+</body>
+</html>
