@@ -2,103 +2,66 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>治愈小太阳+彩虹</title>
+    <title>Emoji 小太阳+彩虹</title>
     <style>
         body {
+            /* 你的渐变背景 */
             background: linear-gradient(to right, #FFECB3, #FFCCBC); 
-            display: flex;
+            /* 让内容居中 */
+            display: flex; 
+            /* 垂直+水平居中 */
             justify-content: center; 
             align-items: center; 
+            /* 占满浏览器高度 */
             height: 100vh; 
+            /* 清除默认边距 */
             margin: 0; 
+            /* 让页面更清爽 */
             overflow: hidden; 
-            position: relative; /* 给彩虹伪元素做定位参考 */
         }
 
+        /* 小太阳容器（用 emoji 实现） */
         .sun {
-            width: 100px; 
-            height: 100px;
-            border-radius: 50%; 
-            background-color: #FFD700; 
-            box-shadow: 0 0 50px #FFD700; 
+            /* 超大 emoji ，可调整大小 */
+            font-size: 80px; 
+            /* 让彩虹在太阳下方 */
             position: relative; 
-            animation: rotate 10s infinite linear; 
+            /* 给鼠标悬浮加互动（可选） */
             cursor: pointer; 
-            z-index: 1; /* 让太阳在彩虹上层 */
+            /* 让太阳微微跳动（可爱细节） */
+            animation: bounce 2s infinite ease-in-out; 
         }
 
-        .sun::before,
+        /* 彩虹用伪元素 + emoji ，简单粗暴！ */
         .sun::after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            border: 20px solid transparent;
-            border-bottom-color: #FFD700; 
+            content: "🌈"; 
+            /* 彩虹大小 */
+            font-size: 40px; 
+            /* 放在太阳下方 */
+            position: absolute; 
+            bottom: -60px; 
+            left: 50%; 
+            /* 水平居中 */
+            transform: translateX(-50%); 
+            /* 彩虹微微摆动 */
+            animation: swing 3s infinite ease-in-out; 
         }
 
-        .sun::before {
-            top: -30px;
-            left: 30px;
-            transform: rotate(90deg);
+        /* 太阳跳动动画 */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        .sun::after {
-            bottom: -30px;
-            left: 30px;
-            transform: rotate(-90deg);
-        }
-
-        .sun span {
-            position: absolute;
-            width: 20px;
-            height: 100px;
-            background-color: #FFD700;
-            border-radius: 10px;
-        }
-
-        .sun span:nth-child(1) {
-            left: -20px;
-            top: 0;
-            transform: rotate(90deg);
-        }
-
-        .sun span:nth-child(2) {
-            right: -20px;
-            top: 0;
-            transform: rotate(90deg);
-        }
-
-        /* 彩虹样式：用伪元素做半圆弧彩虹 */
-        body::after {
-            content: "";
-            position: absolute;
-            /* 彩虹宽度 */
-            width: 300px; 
-            /* 彩虹高度（半圆半径） */
-            height: 150px; 
-            /* 让彩虹底部对齐太阳 */
-            bottom: 20%; 
-            left: 50%;
-            transform: translateX(-50%);
-            /* 彩虹渐变颜色：红橙黄绿青蓝紫 */
-            background: linear-gradient(45deg, #ff0000, #ffa500, #ffff00, #008000, #00ffff, #0000ff, #800080);
-            /* 裁剪成半圆 */
-            clip-path: ellipse(50% 50% at 50% 50%);
-            opacity: 0.8; /* 稍微透明更柔和 */
-            z-index: 0; /* 让彩虹在太阳下层 */
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* 彩虹摆动动画 */
+        @keyframes swing {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(10deg); }
         }
     </style>
 </head>
 <body>
-    <div class="sun">
-        <span></span>
-        <span></span>
-    </div>
+    <!-- 小太阳用 emoji 🌞 ，可换成你喜欢的太阳表情！ -->
+    <div class="sun">🌞</div>
 </body>
 </html>
