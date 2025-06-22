@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>sun~</title>
+    <title>超治愈互动贴纸</title>
     <style>
         /* 基础布局：柔性居中 + 渐变背景 */
         body {
@@ -12,7 +12,7 @@
             height: 100vh;
             margin: 0;
             /* 初始背景：温暖阳光 */
-            background: linear-gradient(120deg, #FFECB3, #FFCCBC);
+            background: linear-gradient(120deg, #FFECB3, #fff);
             /* 动画过渡更丝滑 */
             transition: all 0.5s ease; 
             overflow: hidden; /* 防止花瓣溢出 */
@@ -24,7 +24,7 @@
             height: 120px;
             cursor: pointer;
             /* 替换成你截图里的太阳贴纸路径！ */
-            background: url('🌞') no-repeat center/cover;
+            background: url('sun-sticker.png') no-repeat center/cover;
             position: absolute;
             top: 30%;
             left: 40%;
@@ -76,29 +76,29 @@
         }
 
         /* 日夜模式背景 */
-        body.night {🌙
+        body.night {
             background: linear-gradient(120deg, #2b2b4b, #000);
         }
         body.night .sun {
             /* 替换成月亮贴纸路径！ */
-            background: url('🌞') no-repeat center/cover;
+            background: url('moon-sticker.png') no-repeat center/cover;
             box-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
 
         /* 晴天/雨后背景 */
-        body.rainy {🌧️
+        body.rainy {
             background: linear-gradient(120deg, #b3d8ff, #fff);
         }
     </style>
 </head>
 <body>
-    <div class="🌞" id="🌞"></div>
-    <div class="🌧️" id="🌧️"></div>
+    <div class="sun" id="sun"></div>
+    <div class="rainbow" id="rainbow"></div>
 
     <script>
         // 点击计数+花瓣掉落
         let sunCount = 0;
-        const sun = document.getElementById('🌞');
+        const sun = document.getElementById('sun');
         sun.addEventListener('click', () => {
             sunCount++;
             // 弹窗提示（改成更炫酷的数字飘出效果更好，这里先简化）
@@ -116,13 +116,13 @@
 
             // 10次点击触发彩蛋：日夜切换
             if (sunCount % 10 === 0) {
-                document.body.classList.toggle('🌙');
+                document.body.classList.toggle('night');
                 alert('触发日夜切换！夜晚模式已开启～');
             }
         });
 
         // 彩虹点击：彩虹雨+天气切换
-        const rainbow = document.getElementById('🌈');
+        const rainbow = document.getElementById('rainbow');
         rainbow.addEventListener('click', () => {
             // 掉落彩虹碎片
             for (let i=0; i<15; i++) {
@@ -135,15 +135,15 @@
             }
 
             // 切换雨后背景
-            document.body.classList.toggle('🌧️');
-            const isRainy = document.body.classList.contains('🌧️');
+            document.body.classList.toggle('rainy');
+            const isRainy = document.body.classList.contains('rainy');
             alert(isRainy ? '下雨啦～雨后见彩虹！' : '雨停啦～回到晴天～');
         });
 
         // 高级玩法：拖拽贴纸（简单版）
         let dragTarget = null;
         document.addEventListener('mousedown', (e) => {
-            if (e.target.classList.contains('🌞') || e.target.classList.contains('rainbow')) {
+            if (e.target.classList.contains('sun') || e.target.classList.contains('rainbow')) {
                 dragTarget = e.target;
             }
         });
