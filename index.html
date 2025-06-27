@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+</html><!DOCTYPE html>
 <html>
 <body style="background:#000;color:#fff">
   <h1 style="font-family:serif">sixu.art</h1>
@@ -8,16 +8,23 @@
 </html><!DOCTYPE html>
 <head>
   <style>
-  body:hover::after { 
+  body::after { 
   content: "like you is art...才、才不是刻意想的！"; 
   position: fixed; 
   bottom: 0; 
   right: 0;
-  color: transparent;  
+  color: transparent; 
   transition: all 0.5s;
 }
-body:hover::after:hover { color: #ff6b81; }
-    </style>
-</head> 
+body.show::after {
+  color: #ff6b81;
+}
+</style>
+</head>
+<body>
+<script>
+  document.body.addEventListener('click', () => {
+    document.body.classList.toggle('show');
+  });
+</script>
 </body>
-</html>
