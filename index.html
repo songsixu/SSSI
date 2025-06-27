@@ -6,144 +6,17 @@
   <span id="text" style="color:hotpink">loading poetry...</span></p >
 </body>
 </html><!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body {
-            background: linear-gradient(120deg, #FFECB3, #fff); 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; 
-            position: relative; 
-            transition: all 0.5s ease; 
-            cursor: url('https://cdn-icons-png.flaticon.com/512/869/869869.png'), auto; 
-        }
-
-        /* 核心表情容器 */
-        .sun, .rainbow, .cat, .heart {
-            position: absolute;
-            cursor: grab;
-            transition: transform 0.3s;
-            text-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .sun { font-size: 80px; top: 30%; left: 40%; }
-        .rainbow { font-size: 60px; top: 50%; left: 55%; }
-        .cat { font-size: 40px; color: #ff99cc; } /* 粉色小猫 */
-        .heart { font-size: 30px; color: #ff4d4d; } /* 红色爱心 */
-
-        /* 拖拽状态 */
-        .sun:active, .rainbow:active, .cat:active, .heart:active { 
-            cursor: grabbing; 
-            transform: scale(1.2); 
-        }
-
-        /* 掉落动画（通用） */
-        @keyframes fall {
-            to { transform: translateY(110vh); }
-        }
-
-        /* 日夜/晴雨模式 */
-        body.night { background: linear-gradient(120deg, #2b2b4b, #000); }
-        body.night .sun { content: "🌙"; text-shadow: 0 0 10px #fff; }
-        body.rainy { background: linear-gradient(120deg, #b3d8ff, #fff); }
-    </style>
-</head>
-<body>
-    <!-- 主表情：可替换成你爱的符号！ -->
-    <div class="sun" id="sun">🌞</div> 
-    <div class="rainbow" id="rainbow">🌈</div> 
-
-    <script>
-        // 点击计数+表情雨（花瓣/碎片/小猫）
-        let sunCount = 0;
-        const sun = document.getElementById('sun');
-        sun.addEventListener('click', () => {
-            sunCount++;
-            alert(`已收集太阳表情 ${sunCount} 次～`);
-            
-            // 随机掉落：花瓣❀ / 小猫🐱 / 爱心💗
-            const effects = ["petal", "cat", "heart"];
-            for (let i=0; i<15; i++) {
-                const effectType = effects[Math.floor(Math.random()*3)];
-                const el = document.createElement('div');
-                
-                if (effectType === "petal") {
-                    el.className = 'petal';
-                    el.style.fontSize = '20px';
-                    el.style.color = `hsl(${Math.random()*360}, 70%, 70%)`;
-                    el.textContent = "❀"; // 花瓣表情
-                } else if (effectType === "cat") {
-                    el.className = 'cat';
-                    el.textContent = "🐱"; // 小猫表情
-                    el.style.animationDuration = Math.random()*2 + 1 + 's';
-                } else {
-                    el.className = 'heart';
-                    el.textContent = "💗"; // 爱心表情
-                    el.style.animationDuration = Math.random()*1.5 + 1 + 's';
-                }
-
-                el.style.left = Math.random()*100 + 'vw';
-                el.style.animation = 'fall 3s linear';
-                document.body.appendChild(el);
-                setTimeout(() => el.remove(), 3000);
-            }
-
-            // 10次触发日夜切换
-            if (sunCount % 10 === 0) {
-                document.body.classList.toggle('night');
-                sun.textContent = document.body.classList.contains('night') ? '🌙' : '🌞';
-                alert('触发日夜切换！' + (document.body.classList.contains('night') ? '晚安～' : '早安～'));
-            }
-        });
-
-        // 彩虹点击：彩虹碎片+晴雨切换+额外爱心
-        const rainbow = document.getElementById('rainbow');
-        rainbow.addEventListener('click', () => {
-            // 彩虹专属：彩虹碎片💎 + 双倍爱心
-            for (let i=0; i<20; i++) {
-                const shard = document.createElement('div');
-                shard.style.position = 'absolute';
-                shard.style.fontSize = '16px';
-                shard.style.left = Math.random()*100 + 'vw';
-                shard.style.animation = 'fall 2s linear';
-                shard.style.color = transparent;
-                shard.style.backgroundClip = 'text';
-                shard.style.webkitBackgroundClip = 'text';
-                shard.style.backgroundImage = 'linear-gradient(45deg, #ff0000, #ffff00, #00ff00, #0000ff)';
-                
-                // 50% 概率出彩虹碎片💎 ，50% 出爱心💗
-                shard.textContent = Math.random() > 0.5 ? '💎' : '💗'; 
-                document.body.appendChild(shard);
-                setTimeout(() => shard.remove(), 2000);
-            }
-
-            // 晴雨切换
-            document.body.classList.toggle('rainy');
-            rainbow.textContent = document.body.classList.contains('rainy') ? '🌧️' : '🌈';
-            alert(document.body.classList.contains('rainy') ? '下雨啦！记得带伞～' : '天晴啦！出去逛逛吧～');
-        });
-
-        // 全局拖拽（所有表情都能拖！）
-        document.addEventListener('mousedown', (e) => {
-            const target = e.target.closest('.sun, .rainbow, .cat, .heart');
-            if (target) {
-                const startX = e.clientX - target.offsetLeft;
-                const startY = e.clientY - target.offsetTop;
-
-                const moveHandler = (e) => {
-                    target.style.left = e.clientX - startX + 'px';
-                    target.style.top = e.clientY - startY + 'px';
-                };
-
-                document.addEventListener('mousemove', moveHandler);
-                document.addEventListener('mouseup', () => {
-                    document.removeEventListener('mousemove', moveHandler);
-                });
-            }
-        });
-    </script>
+<style>
+         body:hover::after { 
+  content: "like you is art...才、才不是刻意想的！"; 
+  position: fixed; 
+  bottom: 0; 
+  right: 0;
+  color: transparent;  
+  transition: all 0.5s;
+}
+body:hover::after:hover { color: #ff6b81; }  
+ </script>
 </body>
 </html>
+  
