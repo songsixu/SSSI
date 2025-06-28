@@ -1,30 +1,184 @@
-</html><!DOCTYPE html>
-<html>
-<body style="background:#000;color:#fff">
-  <h1 style="font-family:serif">sixu.art</h1>
-  <p>like you is art<br>↓<br> 
-  <span id="text" style="color:hotpink">loading poetry...</span></p >
-</body>
-</html><!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <style>
-  body::after { 
-  content: "like you is art...才、才不是刻意想的！"; 
-  position: fixed; 
-  bottom: 0; 
-  right: 0;
-  color: transparent; 
-  transition: all 0.5s;
-}
-body.show::after {
-  color: #ff6b81;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码验证页面</title>
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4a6fa5;
+        }
+        
+        .input-group label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #999;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+        
+        input:focus + label, input:not(:placeholder-shown) + label {
+            top: -10px;
+            font-size: 12px;
+            color: #4a6fa5;
+        }
+        
+        button {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #3a5c85;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .error {
+            background-color: #ffeeee;
+            color: #e74c3c;
+            border: 1px solid #ffcccc;
+        }
+        
+        /* 隐藏页面样式 */
+        .hidden-page {
+            display: none;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        
+        .hidden-page h2 {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .hidden-page p {
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .emoji {
+            font-size: 28px;
+        }
+    </style>
 </head>
 <body>
-<script>
-  document.body.addEventListener('click', () => {
-    document.body.classList.toggle('show');
-  });
-</script>
+    <div class="container" id="mainContainer">
+        <h1>密码验证</h1>
+        <div class="input-group">
+            <input type="password" id="passwordInput" placeholder=" ">
+            <label for="passwordInput">输入密码</label>
+        </div>
+        <button id="verifyButton">验证</button>
+        <div class="message error" id="errorMessage">脑洞未匹配(T＿T)</div>
+    </div>
+    
+    <div class="hidden-page" id="hiddenPage">
+        <h2>恭喜你破解了Si的量子态😼</h2>
+        <p>"Like you is Art~"</p >
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const passwordInput = document.getElementById('passwordInput');
+        const verifyButton = document.getElementById('verifyButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const mainContainer = document.getElementById('mainContainer');
+        const hiddenPage = document.getElementById('hiddenPage');
+        
+        // 验证密码并跳转
+        function verifyPassword() {
+            const password = passwordInput.value.trim();
+            
+            // 清空之前的提示信息
+            errorMessage.style.display = 'none';
+            
+            // 验证密码：输入1.4或清菁
+            if (password === '1.4' || password === '清菁') {
+                // 显示隐藏页面，隐藏主容器
+                mainContainer.style.display = 'none';
+                hiddenPage.style.display = 'block';
+            } else {
+                // 显示错误信息
+                errorMessage.style.display = 'block';
+                // 输入框错误样式
+                passwordInput.style.borderColor = '#e74c3c';
+                setTimeout(() => {
+                    passwordInput.style.borderColor = '#ddd';
+                }, 2000);
+            }
+        }
+        
+        // 按钮点击事件
+        verifyButton.addEventListener('click', verifyPassword);
+        
+        // 输入框回车事件
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                verifyPassword();
+            }
+        });
+    </script>
 </body>
+</html>
