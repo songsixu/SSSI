@@ -1,145 +1,208 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>四煦</title>
-  <style>
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: 'Ma Shan Zheng', cursive;
-    }
-
-    body {
-      background: url('https://example.com/your-green-forest.jpg') no-repeat center center; 
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-    .container {
-      width: 80%;
-      max-width: 800px;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      transform: translateY(0);
-      opacity: 1;
-      transition: all 0.5s ease;
-    }
-    .title-group {
-      margin-bottom: 25px;
-    }
-
-    .chinese-title {
-      font-size: 2.5rem;
-      color: #556B2F;
-      margin: 0;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-    }
-
-    .english-title {
-      font-size: 1.2rem;
-      color: #6B8E23;
-      margin: 8px 0 0;
-      font-style: italic;
-      text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
-    }
-    .poem p {
-      font-size: 1.15rem;
-      line-height: 2;
-      color: #333;
-      margin: 10px 0;
-      opacity: 0.9;
-      transition: color 0.3s ease;
-    }
-      
-    .decorative-line {
-      width: 60%;
-      height: 2px;
-      background: linear-gradient(to right, transparent, #90EE90, transparent);
-      margin: 25px auto;
-    }
-    .art-text {
-      font-size: 1.8rem;
-      color: #DC143C;
-      margin: 20px 0 10px;
-      text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.7);
-    }
-    .heart-icon {
-      display: inline-block;
-      animation: beat 1.5s infinite;
-      transform-origin: center;
-      margin: 0 5px;
-    }
-
-    @keyframes beat {
-      0% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.15);
-      }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-    particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    } */
-    @media (max-width: 768px) {
-      .container {
-        width: 90%;
-        padding: 20px;
-      }
-
-      .chinese-title {
-        font-size: 2rem;
-      }
-
-      .poem p {
-        font-size: 1rem;
-        line-height: 1.8;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四煦 SIXU</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: 'Ma Shan Zheng', 'Arial', cursive;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* 标题样式 */
+        .title-box {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .chinese-title {
+            font-size: 2.2rem;
+            color: #8B4513;
+            margin: 0;
+            font-weight: normal;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .english-title {
+            font-size: 1.2rem;
+            color: #5D4037;
+            margin: 5px 0 20px;
+            font-style: italic;
+        }
+        
+        /* 诗句样式 */
+        .poem {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #424242;
+            margin: 20px 0;
+        }
+        .poem p {
+            margin: 10px 0;
+            transition: all 0.5s ease;
+        }
+        .poem p:nth-child(1) { font-style: italic; color: #6D4C41; }
+        .poem p:nth-child(2) { color: #8D6E63; font-weight: bold; }
+        .poem p:nth-child(3) { color: #A1887F; }
+        .poem p:nth-child(4) { color: #BCAAA4; }
+        .poem p:nth-child(5) { color: #A1887F; }
+        .poem p:nth-child(6) { color: #8D6E63; font-weight: bold; }
+        
+        /* 装饰元素 */
+        .decorative-line {
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #8B4513, transparent);
+            margin: 25px auto;
+        }
+        .art-text {
+            font-size: 1.8rem;
+            color: #E91E63;
+            margin: 30px 0 10px;
+            font-weight: normal;
+        }
+        .heart-icon {
+            display: inline-block;
+            animation: beat 1.5s infinite;
+            transform-origin: center;
+        }
+        
+        /* 动画效果 */
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .grass-animation {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='40' viewBox='0 0 100 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40Q25 0 50 40T100 40' fill='none' stroke='%234CAF50' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+            background-size: 100px 40px;
+            animation: grassMove 8s linear infinite;
+            z-index: 1;
+        }
+        @keyframes grassMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 0; }
+        }
+    </style>
+    <!-- 引入字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 </head>
-
 <body>
-  <div class="container">
-    <div class="title-group">
-      <h1 class="chinese-title">兼煦随青，含蕴温熙，共涵生机以蔓。</h1>
-      <p class="english-title">Horizon Where Warmth and Verdure Mingle</p >
+    <!-- 动态粒子背景容器 -->
+    <div id="particles" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+    
+    <div class="container">
+        <div class="title-box">
+            <h1 class="chinese-title">兼煦随青，含蕴温熙，共涵生机以蔓。</h1>
+            <p class="english-title">Horizon Where Warmth and Verdure Mingle</p >
+        </div>
+        
+        <div class="poem">
+            <p>兼容的天地，以爱为序，</p >
+            <p>把暖烘成一枚，</p >
+            <p>会走的金币，</p >
+            <p>追随着光线的舞步，</p >
+            <p>青草逐渐铺上大地，</p >
+            <p>"我们一起走吧，向着光的方向。"</p >
+        </div>
+        
+        <div class="decorative-line"></div>
+        
+        <p class="art-text">I like you, <span class="heart-icon">❤️</span> like you is an art</p >
+        
+        <!-- 草地图案动画 -->
+        <div class="grass-animation"></div>
     </div>
-    <div class="poem">
-      <p>兼容的天地，以爱为序，</p >
-      <p>把暖烘成一枚，</p >
-      <p>会走的金币，</p >
-      <p>追随着光线的舞步，</p >
-      <p>青草逐渐铺上大地，</p >
-      <p>"我们一起走吧，向着光的方向。"</p >
-    </div>
-    <div class="decorative-line"></div>
-    <p class="art-text">I like you, <span class="heart-icon">❤️</span> like you is an art</p >
-  </div>
-</script>
+
+    <script>
+        // 动态粒子背景脚本
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 80; // 粒子数量
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+            
+            // 鼠标移动追踪
+            let mouseX = 0, mouseY = 0;
+            window.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX / window.innerWidth;
+                mouseY = e.clientY / window.innerHeight;
+            });
+            
+            // 创建单个粒子
+            function createParticle() {
+                const particle = document.createElement('div');
+                const size = Math.random() * 3 + 1; // 粒子大小
+                
+                // 粒子样式
+                particle.style.position = 'absolute';
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3})`;
+                particle.style.borderRadius = '50%';
+                particle.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.transform = 'translate(-50%, -50%)';
+                particle.style.zIndex = '1';
+                
+                // 粒子动画属性
+                particle.speedX = Math.random() * 2 - 1; // 水平速度
+                particle.speedY = Math.random() * 2 - 1; // 垂直速度
+                particle.phaseX = Math.random() * 10; // 相位X
+                particle.phaseY = Math.random() * 10; // 相位Y
+                
+                particlesContainer.appendChild(particle);
+                
+                // 动画循环
+                function animate() {
+                    // 鼠标影响粒子运动
+                    const dx = mouseX - particle.speedX * 0.1 - 0.5;
+                    const dy = mouseY - particle.speedY * 0.1 - 0.5;
+                    
+                    // 粒子位置更新（带正弦波动效果）
+                    particle.style.left = `${50 + 40 * dx + Math.sin(Date.now() * 0.001 + particle.phaseX) * 5}%`;
+                    particle.style.top = `${50 + 40 * dy + Math.cos(Date.now() * 0.001 + particle.phaseY) * 5}%`;
+                    
+                    // 透明度随距离变化
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    particle.style.opacity = 1 - distance * 0.7;
+                    
+                    requestAnimationFrame(animate);
+                }
+                
+                animate();
+            }
+        });
+    </script>
 </body>
 </html>
