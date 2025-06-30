@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Like You Is Art</title>
+    <title>兼煦随青 Horizon</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f6f0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(to bottom, #f0f9e8, #e0f2fe);
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,38 +17,96 @@
             color: #333;
         }
         .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            overflow: hidden;
+        }
+        .title-box {
             text-align: center;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: relative;
         }
-        .art-text {
-            font-size: 2.5rem;
+        .main-title {
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #e74c3c;
-            margin: 10px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            color: #4a6fa5;
+            margin: 5px 0;
         }
-        .subtitle {
+        .sub-title {
             font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 20px;
+            color: #6c8ea7;
+            font-style: italic;
         }
-        .decorative-line {
-            width: 80%;
-            height: 2px;
-            background-color: #e74c3c;
-            margin: 20px auto;
+        .poem-container {
+            line-height: 1.8;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        .poem-line {
+            position: relative;
+            padding-left: 25px;
+            margin: 12px 0;
+            transition: all 0.3s ease;
+        }
+        .poem-line:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #8bc6ec;
+            background-image: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);
+        }
+        .highlight-line {
+            font-weight: 600;
+            color: #e63946;
+            font-size: 1.1rem;
+        }
+        .english-title {
+            text-align: right;
+            color: #555;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+        .decorative-element {
+            height: 3px;
+            background: linear-gradient(to right, #8bc6ec, #9599e2, #8bc6ec);
+            margin: 25px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="art-text">Like You Is Art</h1>
-        <p class="subtitle">你都是独一无二的艺术品</p >
-        <div class="decorative-line"></div>
-        <p>你本身，就是这个世界最美好的创作</p >
+        <div class="title-box">
+            <h2 class="main-title">兼煦随青</h2>
+            <p class="sub-title">含蕴温熙，共涵生机以蔓</p >
+        </div>
+        
+        <div class="decorative-element"></div>
+        
+        <div class="poem-container">
+            <div class="poem-line">兼容的天地，以爱为序</div>
+            <div class="poem-line">把暖烘成一枚</div>
+            <div class="poem-line highlight-line">会走的金币</div>
+            <div class="poem-line">追随着光线的舞步</div>
+            <div class="poem-line">青草逐渐铺上大地</div>
+            <div class="poem-line highlight-line">"我们一起走吧，向着光的方向。"</div>
+        </div>
+        
+        <div class="english-title">
+            <p>Horizon Where Warmth and Verdure Mingle</p >
+            <p class="main-title">兼煦随青 Horizon</p >
+        </div>
     </div>
 </body>
 </html>
