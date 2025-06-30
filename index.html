@@ -1,142 +1,251 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四煦</title>
-    <style>
-        /* 基础样式 */
-        body {
-            font-family: 'Ma Shan Zheng', 'Arial', cursive;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-            overflow: hidden;
-        }
-        
-        .container {
-            text-align: center;
-            padding: 30px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 90%;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* 标题样式 */
-        .title-box {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .chinese-title {
-            font-size: 2.2rem;
-            color: #8B4513;
-            margin: 0;
-            font-weight: normal;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-        .english-title {
-            font-size: 1.2rem;
-            color: #5D4037;
-            margin: 5px 0 20px;
-            font-style: italic;
-        }
-        
-        /* 诗句样式 */
-        .poem {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #424242;
-            margin: 20px 0;
-            position: relative;
-            z-index: 2;
-        }
-        .poem p {
-            margin: 10px 0;
-            transition: all 0.5s ease;
-        }
-        .poem p:nth-child(1) { font-style: italic; color: #6D4C41; }
-        .poem p:nth-child(2) { color: #8D6E63; font-weight: bold; }
-        .poem p:nth-child(3) { color: #A1887F; }
-        .poem p:nth-child(4) { color: #BCAAA4; }
-        .poem p:nth-child(5) { color: #A1887F; }
-        .poem p:nth-child(6) { color: #8D6E63; font-weight: bold; }
-        
-        /* 装饰元素 */
-        .decorative-line {
-            width: 60%;
-            height: 2px;
-            background: linear-gradient(to right, transparent, #8B4513, transparent);
-            margin: 25px auto;
-        }
-        .art-text {
-            font-size: 1.8rem;
-            color: #E91E63;
-            margin: 30px 0 10px;
-            font-weight: normal;
-        }
-        .heart-icon {
-            display: inline-block;
-            animation: beat 1.5s infinite;
-            transform-origin: center;
-        }
-        
-        /* 动画效果 */
-        @keyframes beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        .grass-animation {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: url("data:image/svg+xml,%3Csvg width='100' height='40' viewBox='0 0 100 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40Q25 0 50 40T100 40' fill='none' stroke='%234CAF50' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
-            background-size: 100px 40px;
-            animation: grassMove 8s linear infinite;
-            z-index: 1;
-        }
-        @keyframes grassMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 100px 0; }
-        }
-    </style>
-    <!-- 引入字体 -->
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>四煦</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Ma Shan Zheng', cursive;
+    }
+
+    body {
+      background: url('https://example.com/your-green-forest.jpg') no-repeat center center; 
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      transform: translateY(0);
+      opacity: 1;
+      transition: all 0.5s ease;
+    }
+    .title-group {
+      margin-bottom: 25px;
+    }
+
+    .chinese-title {
+      font-size: 2.5rem;
+      color: #556B2F;
+      margin: 0;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .english-title {
+      font-size: 1.2rem;
+      color: #6B8E23;
+      margin: 8px 0 0;
+      font-style: italic;
+      text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.6);
+    }
+    .poem p {
+      font-size: 1.15rem;
+      line-height: 2;
+      color: #333;
+      margin: 10px 0;
+      opacity: 0.9;
+      transition: color 0.3s ease;
+    }
+      
+    .decorative-line {
+      width: 60%;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #90EE90, transparent);
+      margin: 25px auto;
+    }
+    .art-text {
+      font-size: 1.8rem;
+      color: #DC143C;
+      margin: 20px 0 10px;
+      text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.7);
+    }
+    .heart-icon {
+      display: inline-block;
+      animation: beat 1.5s infinite;
+      transform-origin: center;
+      margin: 0 5px;
+    }
+
+    @keyframes beat {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+    particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    } */
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .chinese-title {
+        font-size: 2rem;
+      }
+
+      .poem p {
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  -- <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script> --
 </head>
+
 <body>
-    <div class="container">
-        <div class="title-box">
-            <h1 class="chinese-title">兼煦随青，含蕴温熙，共涵生机以蔓。</h1>
-            <p class="english-title">Horizon Where Warmth and Verdure Mingle</p >
-        </div>
-        
-        <div class="poem">
-            <p>兼容的天地，以爱为序，</p >
-            <p>把暖烘成一枚，</p >
-            <p>会走的金币，</p >
-            <p>追随着光线的舞步，</p >
-            <p>青草逐渐铺上大地，</p >
-            <p>"我们一起走吧，向着光的方向。"</p >
-        </div>
-        
-        <div class="decorative-line"></div>
-        
-        <p class="art-text">I like you, <span class="heart-icon">❤️</span> like you is an art</p >
-                                        <p>四煦</p >
-        
-        <div class="grass-animation"></div>
+  <div class="container">
+    <div class="title-group">
+      <h1 class="chinese-title">兼煦随青，含蕴温熙，共涵生机以蔓。</h1>
+      <p class="english-title">Horizon Where Warmth and Verdure Mingle</p >
     </div>
+    <div class="poem">
+      <p>兼容的天地，以爱为序，</p >
+      <p>把暖烘成一枚，</p >
+      <p>会走的金币，</p >
+      <p>追随着光线的舞步，</p >
+      <p>青草逐渐铺上大地，</p >
+      <p>"我们一起走吧，向着光的方向。"</p >
+    </div>
+    <div class="decorative-line"></div>
+    <p class="art-text">I like you, <span class="heart-icon">❤️</span> like you is an art</p >
+  </div>
+  <script>
+      particlesJS('particles', {
+     "particles": {
+        "number": {
+          "value": 80,
+         "density": {
+         "enable": true,
+           "value_area": 800
+        }
+        },
+        "color": {
+          "value": "#ffffff"
+     },
+        "shape": {
+          "type": "circle",
+           "stroke": {
+          "width": 0,
+            "color": "#000000"
+        }
+         },
+        "opacity": {
+          "value": 0.5,
+         "random": false,
+          "anim": {
+           "enable": false,
+           "speed": 1,
+            "opacity_min": 0.1,
+           "sync": false
+         }
+   },
+        "size": {
+          "value": 3,
+          "random": true,
+         "anim": {
+           "enable": false,
+           "speed": 40,
+         "size_min": 0.1,
+            "sync": false
+          }
+        },
+         "line_linked": {
+           "enable": false,
+        "distance": 150,
+          "color": "#ffffff",
+         "opacity": 0.4,
+         "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+      "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+       "enable": false,
+           "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+       },
+       "interactivity": {
+         "detect_on": "canvas",
+     "events": {
+          "onhover": {
+            "enable": true,
+           "mode": "grab"
+         },
+         "onclick": {
+           "enable": true,
+            "mode": "push"
+          },
+         "resize": true
+        },
+      "modes": {
+          "grab": {
+            "distance": 140,
+           "line_linked": {
+               "opacity": 1
+           }
+         },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+           "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+           "distance": 200,
+            "duration": 0.4
+          },
+           "push": {
+            "particles_nb": 4
+         },
+         "remove": {
+           "particles_nb": 2
+         }
+       }
+      },
+  "retina_detect": true
+ });
+  </script>
 </body>
+
 </html>
