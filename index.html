@@ -110,6 +110,63 @@
         </button>
       </div>
     </div>
+<div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 relative overflow-hidden float-animation">
+      <div class="absolute -top-16 -right-16 w-64 h-64 bg-accent/20 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-primary/10 rounded-full blur-2xl"></div>
+      
+      <div class="relative z-10">
+        <div class="input-container">
+            <input type="text" id="numberInput" placeholder="输入一个数字...">
+        </div>
+        <button id="checkButton">验证数字</button>
+        <div class="result">
+            <div class="normal-message">输入数字后点击按钮，看看会发生什么~</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('checkButton').addEventListener('click', function() {
+            const input = document.getElementById('numberInput').value.trim();
+            const resultDiv = document.querySelector('.result');
+            const normalMessage = document.querySelector('.normal-message');
+            
+            // 清空之前的内容
+            while (resultDiv.firstChild) {
+                resultDiv.removeChild(resultDiv.firstChild);
+            }
+            
+            if (input === '1.4' || input === '12.7') {
+                // 创建爱心容器
+                const heartContainer = document.createElement('div');
+                heartContainer.className = 'heart-container';
+                
+                // 创建爱心
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heartContainer.appendChild(heart);
+                
+                resultDiv.appendChild(heartContainer);
+                
+                // 创建消息
+                const message = document.createElement('div');
+                message.className = 'message';
+                message.innerHTML = 'like you is an art~<br>6^u 爱你永无止境 ❤️';
+                resultDiv.appendChild(message);
+            } else {
+                // 显示普通消息
+                resultDiv.appendChild(normalMessage);
+                normalMessage.textContent = '试试输入1.4或12.7看看~';
+            }
+        });
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div class="text-2xl md:text-3xl text-primary">
+            <i class="fas fa-leaf animate-pulse"></i>
+          </div>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div class="text-2xl md:text-3xl text-primary">
+            <i class="fas fa-leaf animate-pulse"></i>
+          </div>
+        </script>
   </main>
  <footer class="mt-16 py-8 text-center text-text/60 text-sm">
     <p class="mb-2">兼煦随青 Horizon 🌿</p >
