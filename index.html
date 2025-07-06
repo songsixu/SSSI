@@ -99,7 +99,7 @@
           <i class="fas fa-comment-dots mr-2 text-secondary"></i> 互动区
         </h3>
         <p class="text-text/80">以心相寄～</p >
-        <textarea id="message" placeholder="输入数字有惊喜哦!..." class="w-full mt-4 p-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20"></textarea>
+        <textarea id="message" placeholder="输入数字有惊喜哦..." class="w-full mt-4 p-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20"></textarea>
         <button id="send-btn" class="mt-3 bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-full transition-all">
           发送 <i class="fas fa-paper-plane ml-1"></i>
         </button>
@@ -110,9 +110,9 @@
     <p class="mb-2">兼煦随青 Horizon 🌿</p >
     <p class="mt-4">温暖与绿意共生的角落</p >
   </footer>
-
+  
   <script>
-    const sunBtn = document.getElementById('sun-btn');
+    const sendBtn = document.getElementById('send-btn');
     const grassPattern = document.querySelector('.grass-pattern');
     
     sunBtn.addEventListener('click', () => {
@@ -133,7 +133,7 @@
             const resultSection = document.getElementById('resultSection');
             const number = parseInt(numberInput.value);
             
-            // 清空之前的内容
+            
             resultSection.innerHTML = '';
             
             if (isNaN(number)) {
@@ -143,8 +143,8 @@
                 return;
             }
             
-            if (number === 1 || number === 4) {
-                // 显示特殊页面 - 旋转爱心和文字
+            if (number === 1.4) {
+                
                 resultSection.classList.remove('unknown');
                 resultSection.classList.add('special');
                 
