@@ -210,7 +210,8 @@
 
                 this.color = color;
 
-                this.angle = Math.random() * Math.PI * 2; // 爱心角度
+               // 原来的随机角度：this.angle = Math.random() * Math.PI * 2;
+                this.angle = Math.random() * Math.PI * 2 + Math.PI; // 加 π，整体反转
 
                 this.radius = Math.random() * 40 + 20; // 爱心大小
 
