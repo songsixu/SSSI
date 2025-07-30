@@ -1,157 +1,159 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>盈盈似煦 SIXU</title>
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-  <style type="text/tailwindcss">
-    @theme {
-      --color-primary: #4CAF50;
-      --color-secondary: #8BC34A;
-      --color-accent: #A5D6A7;
-      --color-text: #333333;
-      --font-inter: 'Inter', sans-serif;
-    }
-    
-    @utility float-animation {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-    
-    @utility text-fade {
-      animation: fadeIn 1.5s ease-in-out;
-    }
-     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    body {
-      background: linear-gradient(135deg, #f5f9f6 0%, #e8f5e9 100%);
-      font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
-    }
-    
-    .grass-pattern {
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234CAF50' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sixu.art - 烟花</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        .title {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            z-index: 10;
+        }
+    </style>
 </head>
+<body>
+    <div class="title">sixu.art</div>
+    <canvas id="fireworks"></canvas>
 
-<body class="min-h-screen grass-pattern">
-  <!-- 顶部动态标题区 -->
-  <header class="relative pt-16 pb-12 text-center">
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-white/30 z-10"></div>
-    <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-primary relative z-20 text-fade">
-      兼煦随青 <span class="text-secondary">.</span>
-    </h1>
-    <p class="text-[clamp(1rem,2vw,1.2rem)] text-text/80 mt-4 max-w-2xl mx-auto relative z-20 text-fade" style="animation-delay: 0.3s">
-      Horizon Where Warmth and Verdure Mingle
-    </p >
-  </header>
+    <script>
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let fireworks = [];
+        let particles = [];
 
-  <!-- 主视觉卡片区 -->
-  <main class="max-w-4xl mx-auto px-4 py-8">
-    <!-- 诗意文案卡片 -->
-    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 relative overflow-hidden float-animation">
-      <div class="absolute -top-16 -right-16 w-64 h-64 bg-accent/20 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-primary/10 rounded-full blur-2xl"></div>
-      
-      <div class="relative z-10">
-       <p class="text-lg md:text-xl text-text/90 leading-relaxed mb-6">
-          <span class="text-primary">ヾ(•ω•`)o</span> 兼煦随青，含蕴温熙，共涵生机以蔓。<br>
-          兼容的天地，以爱为序，<br>
-          把暖烘成一枚，<br>
-          会走的金币，<br>
-          追随着光线的舞步，<br>
-          青草逐渐铺上大地，<br>
-          <span class="font-medium text-secondary">"我们一起走吧，向着光的方向。"</span>
-        </p >
-        
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <div class="text-2xl md:text-3xl text-primary">
-            <i class="fas fa-leaf animate-pulse"></i>
-          </div>
-          <div class="text-center">
-            <p class="font-bold text-primary">兼煦随青 Horizon</p >
-            <p class="text-sm text-text/60">Horizon Where Warmth and Verdure Mingle</p >
-          </div>
-          <div class="text-2xl md:text-3xl text-secondary">
-            <i class="fas fa-sun animate-spin-slow"></i>
-  </div>
-        </div>
-      </div>
-    </div>
+        // 设置画布大小
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-    <!-- 互动彩蛋区 -->
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="bg-white/60 backdrop-blur-sm rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow text-fade" style="animation-delay: 0.6s">
-        <h3 class="text-xl font-semibold text-primary mb-4 flex items-center">
-          <i class="fas fa-heart mr-2 text-secondary"></i> 小彩蛋
-        </h3>
-        <p class="text-text/80">点击下方按钮，让阳光洒满草地～</p >
-        <button id="sun-btn" class="mt-4 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-full transition-all transform hover:scale-105 flex items-center">
-          <i class="fas fa-sun mr-2"></i> 向光而行
-        </button>
-      </div>
- <div class="bg-white/60 backdrop-blur-sm rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow text-fade" style="animation-delay: 0.8s">
-        <h3 class="text-xl font-semibold text-primary mb-4 flex items-center">
-          <i class="fas fa-comment-dots mr-2 text-secondary"></i> 互动区
-        </h3>
-        <p class="text-text/80">以心相寄～</p >
-        <textarea id="message" placeholder="一句话，比如‘爱你呀’..." class="w-full mt-4 p-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20"></textarea>
-        <button id="send-btn" class="mt-3 bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-full transition-all">
-          发送 <i class="fas fa-paper-plane ml-1"></i>
-        </button>
-      </div>
-    </div>
-  </main>
- <footer class="mt-16 py-8 text-center text-text/60 text-sm">
-    <p class="mb-2">兼煦随青 Horizon 🌿</p >
-    <p>I like you, like you is an art ❤</p >
-    <p class="mt-4">温暖与绿意共生的角落</p >
-  </footer>
+        // 烟花类
+        class Firework {
+            constructor() {
+                this.x = width / 2;
+                this.y = height;
+                this.targetY = Math.random() * height * 0.5 + 50;
+                this.targetX = Math.random() * width * 0.8 + width * 0.1;
+                this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                this.speed = 5;
+                this.reached = false;
+            }
 
-  <script>
-    // 阳光动画效果
-    const sunBtn = document.getElementById('sun-btn');
-    const grassPattern = document.querySelector('.grass-pattern');
-    
-    sunBtn.addEventListener('click', () => {
-      grassPattern.style.animation = 'sunShine 3s ease-in-out';
-      sunBtn.innerHTML = '<i class="fas fa-smile-beam mr-2"></i> 阳光正好';
-      setTimeout(() => {
-        grassPattern.style.animation = 'none';
-        void grassPattern.offsetWidth; // 触发重绘
-        grassPattern.style.animation = '';
-        sunBtn.innerHTML = '<i class="fas fa-sun mr-2"></i> 向光而行';
-      }, 3000);
-    });
-    
-    // 消息发送效果
-    const sendBtn = document.getElementById('send-btn');
-    const message = document.getElementById('message');
-    
-    sendBtn.addEventListener('click', () => {
-      if (message.value.trim()) {
-        alert(`你的留言："${message.value}" 已被阳光收录～`);
-        message.value = '';
-      }
-    });
-    
-    // 为页面添加自定义动画
-    document.addEventListener('DOMContentLoaded', () => {
-      const elements = document.querySelectorAll('.text-fade, .float-animation');
-      elements.forEach((el, index) => {
-        el.style.animationDelay = `${index * 0.2}s`;
-      });
-    });
+            update() {
+                // 移动到目标点
+                const dx = this.targetX - this.x;
+                const dy = this.targetY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < this.speed) {
+                    this.reached = true;
+                    // 爆炸产生粒子
+                    for (let i = 0; i < 100; i++) {
+                        particles.push(new Particle(this.x, this.y, this.color));
+                    }
+                    return;
+                }
+                this.x += dx / dist * this.speed;
+                this.y += dy / dist * this.speed;
+            }
 
-     </script>
- </body>
- </html>
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x, this.y + 10);
+                ctx.strokeStyle = this.color;
+                ctx.stroke();
+            }
+        }
+
+        // 粒子类
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8;
+                this.radius = Math.random() * 2 + 1;
+                this.life = 100;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.1; // 重力
+                this.life--;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life / 100;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        // 自动生成烟花
+        function spawnFirework() {
+            fireworks.push(new Firework());
+        }
+        setInterval(spawnFirework, 2000);
+
+        // 点击生成烟花
+        canvas.addEventListener('click', (e) => {
+            const firework = new Firework();
+            firework.targetX = e.clientX;
+            firework.targetY = e.clientY;
+            fireworks.push(firework);
+        });
+
+        // 动画循环
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 更新和绘制烟花
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update();
+                fireworks[i].draw();
+                if (fireworks[i].reached) {
+                    fireworks.splice(i, 1);
+                }
+            }
+
+            // 更新和绘制粒子
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
