@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>卡通小猫拼图游戏</title>
     <style>
-        /* 整体布局样式 - 浅绿色调 */
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f0f9f0; /* 浅绿色背景 */
+            background-color: #f0f9f0;
             margin: 0;
             padding: 20px;
             font-family: Arial, sans-serif;
         }
         h1 {
-            color: #5aae61; /* 浅绿色标题 */
+            color: #5aae61;
             margin-bottom: 10px;
         }
-        /* 拼图容器样式 - 放大尺寸（400x400） */
         #puzzle-container {
             width: 400px;
             height: 400px;
@@ -32,10 +30,9 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             margin-bottom: 20px;
         }
-        /* 拼图块样式 - 使用你的图片 */
         .puzzle-piece {
-            background-image: url('https://imgse.com/i/pVaFZp6'); /* 替换为你的图片地址 */
-            background-size: 400px 400px; /* 与容器尺寸匹配，保证比例正确 */
+            background-image: url('https://s21.ax1x.com/2025/08/07/pVaFZp6.jpg');
+            background-size: 400px 400px;
             border-radius: 4px;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -43,24 +40,20 @@
         .puzzle-piece:hover {
             transform: scale(1.05);
         }
-        /* 空白块样式 */
         .empty-piece {
-            background-color: #ccebc5; /* 浅绿色空白块 */
+            background-color: #ccebc5;
         }
-        /* 参考图样式 - 放大显示 */
         #reference-img {
             width: 200px;
             height: 200px;
-            object-fit: cover; /* 保持图片比例，避免拉伸 */
             margin-top: 10px;
             border-radius: 8px;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
-        /* 按钮样式 - 浅绿色 */
         .control-btn {
             margin: 5px;
             padding: 8px 16px;
-            background-color: #5aae61; /* 浅绿色按钮 */
+            background-color: #5aae61;
             color: white;
             border: none;
             border-radius: 4px;
@@ -68,21 +61,20 @@
             transition: background-color 0.3s ease;
         }
         .control-btn:hover {
-            background-color: #4d9d53; /* 深一点的浅绿色 hover 效果 */
+            background-color: #4d9d53;
         }
     </style>
 </head>
 <body>
     <h1>卡通小猫拼图游戏</h1>
     <div id="puzzle-container"></div>
-    <!-- 参考图使用你的图片 -->
-    < img id="reference-img" src="https://imgse.com/i/pVaFZp6" alt="完整小猫参考图">
+    < img id="reference-img" src="https://s21.ax1x.com/2025/08/07/pVaFZp6.jpg" alt="完整小猫参考图">
     <div>
         <button class="control-btn" id="btn-up">上</button>
         <button class="control-btn" id="btn-down">下</button>
         <button class="control-btn" id="btn-left">左</button>
         <button class="control-btn" id="btn-right">右</button>
-        <button class="control-btn" id="btn-shuffle">打乱</button>
+        <button class="control-btn" id="btn-shuffle">重新打乱</button>
     </div>
 
     <script>
@@ -94,27 +86,24 @@
         const btnRight = document.getElementById('btn-right');
         const btnShuffle = document.getElementById('btn-shuffle');
 
-        // 拼图尺寸（4x4）
         const size = 4;
-        // 存储拼图数据
         let puzzle = [];
-        // 空白块索引
-        let emptyIndex = 15; 
+        let emptyIndex = 15;
 
-        // 初始化拼图（按顺序排列）
-        function initPuzzle() {
+        // 初始化拼图并自动打乱
+        function initAndShuffle() {
             puzzle = Array.from({ length: size * size }, (_, i) => i);
             renderPuzzle();
+            // 页面加载后立即打乱
+            shufflePuzzle();
         }
 
-        // 渲染拼图到页面
         function renderPuzzle() {
             container.innerHTML = '';
             puzzle.forEach((index, i) => {
                 const piece = document.createElement('div');
                 piece.className = `puzzle-piece ${i === emptyIndex ? 'empty-piece' : ''}`;
                 if (i !== emptyIndex) {
-                    // 计算背景位置，保证图片正确切割显示
                     const row = Math.floor(index / size);
                     const col = index % size;
                     piece.style.backgroundPosition = `${-col * 100}px ${-row * 100}px`;
@@ -123,7 +112,6 @@
             });
         }
 
-        // 交换拼图块位置
         function swapPieces(index1, index2) {
             [puzzle[index1], puzzle[index2]] = [puzzle[index2], puzzle[index1]];
             emptyIndex = index2;
@@ -131,66 +119,54 @@
             checkWin();
         }
 
-        // 移动空白块（上下左右）
         function moveEmpty(direction) {
             const row = Math.floor(emptyIndex / size);
             const col = emptyIndex % size;
             let targetIndex;
-            if (direction === 'up' && row > 0) {
-                targetIndex = emptyIndex - size;
-            } else if (direction === 'down' && row < size - 1) {
-                targetIndex = emptyIndex + size;
-            } else if (direction === 'left' && col > 0) {
-                targetIndex = emptyIndex - 1;
-            } else if (direction === 'right' && col < size - 1) {
-                targetIndex = emptyIndex + 1;
-            }
-            if (targetIndex !== undefined) {
-                swapPieces(emptyIndex, targetIndex);
-            }
+            if (direction === 'up' && row > 0) targetIndex = emptyIndex - size;
+            else if (direction === 'down' && row < size - 1) targetIndex = emptyIndex + size;
+            else if (direction === 'left' && col > 0) targetIndex = emptyIndex - 1;
+            else if (direction === 'right' && col < size - 1) targetIndex = emptyIndex + 1;
+            
+            if (targetIndex !== undefined) swapPieces(emptyIndex, targetIndex);
         }
 
-        // 打乱拼图（随机移动空白块多次）
         function shufflePuzzle() {
-            for (let i = 0; i < 100; i++) {
-                const directions = ['up', 'down', 'left', 'right'];
-                const randomDir = directions[Math.floor(Math.random() * directions.length)];
-                moveEmpty(randomDir);
+            // 增加打乱次数，让拼图更乱
+            for (let i = 0; i < 300; i++) {
+                const dirs = ['up', 'down', 'left', 'right'];
+                moveEmpty(dirs[Math.floor(Math.random() * dirs.length)]);
             }
         }
 
-        // 检查是否拼图完成
         function checkWin() {
-            const isWin = puzzle.every((val, i) => val === i);
-            if (isWin) {
-                alert('恭喜！成功拼好小猫拼图啦！');
-                initPuzzle(); // 完成后重置游戏
+            if (puzzle.every((val, i) => val === i)) {
+                alert('太棒啦！小猫拼图拼好啦～');
+                initAndShuffle(); // 完成后自动重新打乱
             }
         }
 
-        // 事件绑定
+        // 绑定按钮事件
         btnUp.addEventListener('click', () => moveEmpty('up'));
         btnDown.addEventListener('click', () => moveEmpty('down'));
         btnLeft.addEventListener('click', () => moveEmpty('left'));
         btnRight.addEventListener('click', () => moveEmpty('right'));
         btnShuffle.addEventListener('click', shufflePuzzle);
+        
+        // 点击拼图块移动
         container.addEventListener('click', (e) => {
             const index = Array.from(container.children).indexOf(e.target);
             if (index !== -1 && index !== emptyIndex) {
-                const row = Math.floor(index / size);
-                const col = index % size;
-                const emptyRow = Math.floor(emptyIndex / size);
-                const emptyCol = emptyIndex % size;
-                // 判断是否相邻（上下左右）
-                if (Math.abs(row - emptyRow) + Math.abs(col - emptyCol) === 1) {
+                const [r1, c1] = [Math.floor(index / size), index % size];
+                const [r2, c2] = [Math.floor(emptyIndex / size), emptyIndex % size];
+                if (Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1) {
                     swapPieces(index, emptyIndex);
                 }
             }
         });
 
-        // 初始化游戏
-        initPuzzle();
+        // 页面加载完成后初始化并自动打乱
+        window.onload = initAndShuffle;
     </script>
 </body>
 </html>
-
