@@ -1,400 +1,324 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>卡通小猫拼图游戏</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <meta charset="UTF-8">
+  <!-- 配置 Tailwind 自定义主题 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF9EBB',
+            secondary: '#B6E388',
+            accent: '#89CFF0',
+            neutral: '#FFF9E6',
+          },
+          fontFamily: {
+            cute: ['"Comic Sans MS"', '"Marker Felt"', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
 
-    <title>sixu.art - 爱心烟花</title>
+      .puzzle-shadow {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      }
 
-    <style>
+      .btn-bounce {
+        transition: transform 0.15s ease;
+      }
 
-        body { margin: 0; background: #0a0a1a; overflow: hidden; }
+      .btn-bounce:active {
+        transform: scale(0.95);
+      }
 
-        canvas { display: block; }
+      .piece-transition {
+        transition: all 0.2s ease-out;
+      }
 
-        .title {
-
-            position: fixed;
-
-            top: 20px;
-
-            left: 0;
-
-            right: 0;
-
-            text-align: center;
-
-            color: #fff;
-
-            font-family: 'Segoe UI', sans-serif;
-
-            font-size: 28px;
-
-            z-index: 10;
-
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-
-        }
-
-    </style>
-
+      /* 增大拼图容器基础尺寸，适配不同设备时也更大 */
+      #puzzle-container {
+        min-width: 320px;
+        min-height: 320px;
+        max-width: 600px;
+        max-height: 600px;
+      }
+    }
+  </style>
 </head>
 
-<body>
-
-    <div class="title">sixu.art ✨</div>
-
-    <canvas id="fireworks"></canvas>
-
-
-
-    <script>
-
-        const canvas = document.getElementById('fireworks');
-
-        const ctx = canvas.getContext('2d');
-
-        let width, height;
-
-        let fireworks = [];
-
-        let particles = [];
-
-        let stars = []; // 闪烁星星
-
-
-
-        // 初始化画布
-
-        function resizeCanvas() {
-
-            width = window.innerWidth;
-
-            height = window.innerHeight;
-
-            canvas.width = width;
-
-            canvas.height = height;
-
-        }
-
-        resizeCanvas();
-
-        window.addEventListener('resize', resizeCanvas);
-
-
-
-        // 初始化闪烁星星
-
-        function initStars() {
-
-            stars = [];
-
-            for (let i = 0; i < 80; i++) {
-
-                stars.push({
-
-                    x: Math.random() * width,
-
-                    y: Math.random() * height,
-
-                    alpha: Math.random() * 0.6 + 0.2,
-
-                    speed: Math.random() * 0.01 + 0.003,
-
-                    dir: Math.random() > 0.5 ? 1 : -1
-
-                });
-
-            }
-
-        }
-
-        initStars();
-
-
-
-        // 烟花类（上升轨迹）
-
-        class Firework {
-
-            constructor() {
-
-                this.x = width / 2;
-
-                this.y = height;
-
-                this.targetY = Math.random() * height * 0.4 + 80; // 爆炸高度
-
-                this.targetX = Math.random() * width * 0.7 + width * 0.15;
-
-                // 粉色系爱心
-
-                this.color = `hsl(${(Math.random() * 30) + 330}, 100%, 70%)`; 
-
-                this.speed = 4;
-
-                this.reached = false;
-
-            }
-
-
-
-            update() {
-
-                const dx = this.targetX - this.x;
-
-                const dy = this.targetY - this.y;
-
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < this.speed) {
-
-                    this.reached = true;
-
-                    // 生成300个细粒子组成爱心
-
-                    for (let i = 0; i < 300; i++) {
-
-                        particles.push(new Particle(this.x, this.y, this.color));
-
-                    }
-
-                    return;
-
-                }
-
-                this.x += dx / dist * this.speed;
-
-                this.y += dy / dist * this.speed;
-
-            }
-
-
-
-            draw() {
-
-                // 细线条轨迹
-
-                ctx.beginPath();
-
-                ctx.moveTo(this.x, this.y);
-
-                ctx.lineTo(this.x, this.y + 8);
-
-                ctx.strokeStyle = this.color;
-
-                ctx.lineWidth = 1; // 超细线
-
-                ctx.stroke();
-
-            }
-
-        }
-
-
-
-        // 爱心粒子类（带闪烁）
-
-        class Particle {
-
-            constructor(x, y, color) {
-
-                this.x = x;
-
-                this.y = y;
-
-                this.color = color;
-
-               // 原来的随机角度：this.angle = Math.random() * Math.PI * 2;
-                this.angle = Math.random() * Math.PI * 2 + Math.PI; // 加 π，整体反转
-
-                this.radius = Math.random() * 40 + 20; // 爱心大小
-
-                this.speed = Math.random() * 0.25 + 0.08; // 扩散速度
-
-                this.life = 180; // 持续时间
-
-                // 闪烁参数
-
-                this.alpha = 1;
-
-                this.flashSpeed = Math.random() * 0.02 + 0.005;
-
-                this.flashDir = 1;
-
-            }
-
-
-
-            update() {
-
-                // 爱心曲线公式
-
-                const theta = this.angle;
-
-                const xPos = 16 * Math.sin(theta) ** 3;
-
-                const yPos = 13 * Math.cos(theta) - 5 * Math.cos(2*theta) 
-
-                            - 2 * Math.cos(3*theta) - Math.cos(4*theta);
-
-                
-
-                // 沿爱心轨迹运动
-
-                this.x += xPos * this.speed;
-
-                this.y += yPos * this.speed;
-
-                this.angle += 0.005; // 缓慢旋转
-
-                
-
-                // 闪烁效果
-
-                this.alpha += this.flashDir * this.flashSpeed;
-
-                if (this.alpha > 1) {
-
-                    this.alpha = 1;
-
-                    this.flashDir = -1;
-
-                } else if (this.alpha < 0.3) {
-
-                    this.alpha = 0.3;
-
-                    this.flashDir = 1;
-
-                }
-
-                
-
-                this.life--;
-
-            }
-
-
-
-            draw() {
-
-                // 细粒子
-
-                ctx.beginPath();
-
-                ctx.arc(this.x, this.y, 1.2, 0, Math.PI * 2); // 超细粒子
-
-                ctx.fillStyle = this.color;
-
-                ctx.globalAlpha = this.alpha * (this.life / 180); // 渐隐+闪烁
-
-                ctx.fill();
-
-                ctx.globalAlpha = 1;
-
-            }
-
-        }
-
-
-
-        // 自动生成烟花
-
-        setInterval(() => fireworks.push(new Firework()), 3000);
-
-
-
-        // 点击生成烟花
-
-        canvas.addEventListener('click', (e) => {
-
-            const f = new Firework();
-
-            f.targetX = e.clientX;
-
-            f.targetY = e.clientY;
-
-            fireworks.push(f);
-
+<body class="bg-gradient-to-br from-neutral to-primary/20 min-h-screen font-cute text-gray-800">
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- 游戏标题 -->
+    <header class="text-center mb-8">
+      <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-bold text-primary drop-shadow-lg">
+        <<<i class="fa fa-paw mr-2"></</</i>卡通小猫拼图
+      </h1>
+      <p class="text-gray-600 mt-2 text-lg">把小猫的图片拼完整吧！</p >
+    </header>
+
+    <!-- 游戏区域 -->
+    <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start justify-center">
+      <!-- 拼图容器 -->
+      <div class="relative">
+        <!-- 拼图完成时的提示 -->
+        <div id="success-message" class="hidden absolute inset-0 bg-white/90 rounded-lg flex flex-col items-center justify-center z-10 border-4 border-secondary">
+          <<<i class="fa fa-check-circle text-6xl text-secondary mb-4"></</</i>
+          <h2 class="text-2xl font-bold text-primary mb-2">太棒了！</h2>
+          <p class="mb-6">你成功拼好了小猫拼图！</p >
+          <button id="play-again" class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-full font-bold btn-bounce">
+            再玩一次
+          </button>
+        </div>
+
+        <!-- 拼图网格 -->
+        <div id="puzzle-container" class="grid grid-cols-4 gap-2 bg-gray-200 p-2 rounded-lg puzzle-shadow relative">
+          <!-- 拼图块将通过 JavaScript 动态生成 -->
+        </div>
+
+        <!-- 原始图片预览 -->
+        <div class="mt-6 bg-white p-3 rounded shadow-md w-full max-w-[300px] mx-auto">
+          <p class="text-center text-base mb-1 font-semibold">参考图：</p >
+          < img src="https://example.com/your-cat-image.jpg" alt="完整的小猫图片" class="w-full mx-auto rounded">
+        </div>
+      </div>
+
+      <!-- 控制区域 -->
+      <div class="bg-white rounded-xl p-6 puzzle-shadow w-full lg:w-auto flex flex-col items-center">
+        <h2 class="text-xl font-bold text-primary mb-4">移动控制</h2>
+
+        <!-- 控制按钮 -->
+        <div class="grid grid-cols-3 gap-3 w-[200px]">
+          <div class="col-start-2">
+            <button id="up" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
+              ↑
+            </button>
+          </div>
+          <div class="col-start-1 row-start-2">
+            <button id="left" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
+              ←
+            </button>
+          </div>
+          <div class="col-start-2 row-start-2">
+            <button id="down" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
+              ↓
+            </button>
+          </div>
+          <div class="col-start-3 row-start-2">
+            <button id="right" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
+              →
+            </button>
+          </div>
+        </div>
+
+        <button id="shuffle" class="mt-6 bg-secondary hover:bg-secondary/80 text-white px-6 py-3 rounded-full font-bold btn-bounce w-full text-lg">
+          <<<i class="fa fa-random mr-2"></</</i>打乱拼图
+        </button>
+
+        <div class="mt-6 text-center">
+          <p class="text-gray-600 mb-2">提示：</p >
+          <ul class="text-sm text-left text-gray-600 space-y-1">
+            <li>• 点击方向键移动空白块</li>
+            <li>• 也可以使用键盘方向键</li>
+            <li>• 拼出完整的小猫图片</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="mt-12 text-center text-gray-500 text-sm">
+      <p>卡通小猫拼图游戏 &copy; 2023</p >
+    </footer>
+  </div>
+
+  <script>
+    // 拼图游戏逻辑
+    document.addEventListener('DOMContentLoaded', () => {
+      const puzzleContainer = document.getElementById('puzzle-container');
+      const shuffleButton = document.getElementById('shuffle');
+      const upButton = document.getElementById('up');
+      const downButton = document.getElementById('down');
+      const leftButton = document.getElementById('left');
+      const rightButton = document.getElementById('right');
+      const successMessage = document.getElementById('success-message');
+      const playAgainButton = document.getElementById('play-again');
+
+      // 拼图尺寸 (4x4)
+      const SIZE = 4;
+      // 存储拼图数据的数组
+      let puzzleArray = [];
+      // 空白块的位置
+      let emptyIndex = SIZE * SIZE - 1;
+
+      // 替换为你实际的小猫图片地址，这里用示例占位，你可替换成真实可访问的图片链接
+      const catImageUrl = 'https://example.com/your-cat-image.jpg'; 
+
+      // 初始化拼图
+      function initializePuzzle() {
+        // 创建有序的拼图数组
+        puzzleArray = Array.from({ length: SIZE * SIZE }, (_, i) => i);
+        renderPuzzle();
+      }
+
+      // 渲染拼图
+      function renderPuzzle() {
+        puzzleContainer.innerHTML = '';
+
+        puzzleArray.forEach((value, index) => {
+          const piece = document.createElement('div');
+          const pieceSize = 100 / (SIZE - 0.1) + '%'; 
+
+          piece.className = `piece-transition rounded-sm cursor-pointer flex items-center justify-center`;
+          piece.style.width = pieceSize;
+          piece.style.height = pieceSize;
+
+          // 空白块
+          if (value === SIZE * SIZE - 1) {
+            piece.classList.add('bg-gray-200');
+            piece.dataset.index = index;
+          } else {
+            // 计算每个拼图块的背景位置
+            const row = Math.floor(value / SIZE);
+            const col = value % SIZE;
+            const xPos = -col * 100;
+            const yPos = -row * 100;
+
+            piece.classList.add('puzzle-shadow');
+            piece.style.backgroundImage = `url(${catImageUrl})`;
+            piece.style.backgroundSize = `${SIZE * 100}% ${SIZE * 100}%`;
+            piece.style.backgroundPosition = `${xPos}% ${yPos}%`;
+            piece.dataset.value = value;
+            piece.dataset.index = index;
+
+            // 点击拼图块移动
+            piece.addEventListener('click', () => movePiece(index));
+          }
+
+          puzzleContainer.appendChild(piece);
         });
+      }
 
+      // 移动拼图块
+      function movePiece(index) {
+        const emptyRow = Math.floor(emptyIndex / SIZE);
+        const emptyCol = emptyIndex % SIZE;
+        const pieceRow = Math.floor(index / SIZE);
+        const pieceCol = index % SIZE;
 
+        // 检查是否相邻（上下左右）
+        if ((Math.abs(emptyRow - pieceRow) === 1 && emptyCol === pieceCol) || (Math.abs(emptyCol - pieceCol) === 1 && emptyRow === pieceRow)) {
+          // 交换位置
+          [puzzleArray[emptyIndex], puzzleArray[index]] = [puzzleArray[index], puzzleArray[emptyIndex]];
+          emptyIndex = index;
+          renderPuzzle();
+          checkWin();
+        }
+      }
 
-        // 动画循环
+      // 移动空白块（根据方向）
+      function moveEmpty(direction) {
+        const row = Math.floor(emptyIndex / SIZE);
+        const col = emptyIndex % SIZE;
+        let newIndex;
 
-        function animate() {
-
-            // 半透明背景，让轨迹更柔和
-
-            ctx.fillStyle = 'rgba(10, 10, 26, 0.15)';
-
-            ctx.fillRect(0, 0, width, height);
-
-
-
-            // 更新星星
-
-            stars.forEach(star => {
-
-                star.alpha += star.dir * star.speed;
-
-                if (star.alpha > 1) { star.alpha = 1; star.dir = -1; }
-
-                else if (star.alpha < 0.2) { star.alpha = 0.2; star.dir = 1; }
-
-                
-
-                ctx.fillStyle = 'white';
-
-                ctx.globalAlpha = star.alpha;
-
-                ctx.fillRect(star.x, star.y, 1, 1);
-
-            });
-
-
-
-            // 更新烟花
-
-            fireworks.forEach((f, i) => {
-
-                f.update();
-
-                f.draw();
-
-                if (f.reached) fireworks.splice(i, 1);
-
-            });
-
-
-
-            // 更新粒子
-
-            particles.forEach((p, i) => {
-
-                p.update();
-
-                p.draw();
-
-                if (p.life <= 0) particles.splice(i, 1);
-
-            });
-
-
-
-            requestAnimationFrame(animate);
-
+        switch (direction) {
+          case 'up':
+            if (row > 0) newIndex = emptyIndex - SIZE;
+            break;
+          case 'down':
+            if (row < SIZE - 1) newIndex = emptyIndex + SIZE;
+            break;
+          case 'left':
+            if (col > 0) newIndex = emptyIndex - 1;
+            break;
+          case 'right':
+            if (col < SIZE - 1) newIndex = emptyIndex + 1;
+            break;
         }
 
-        animate();
+        if (newIndex !== undefined) {
+          movePiece(newIndex);
+        }
+      }
 
-    </script>
+      // 打乱拼图
+      function shufflePuzzle() {
+        // 打乱拼图（确保可解）
+        let shuffles = 1000;
+        while (shuffles--) {
+          const directions = ['up', 'down', 'left', 'right'];
+          const randomDir = directions[Math.floor(Math.random() * directions.length)];
+          moveEmpty(randomDir);
+        }
 
+        // 隐藏成功消息（如果显示）
+        successMessage.classList.add('hidden');
+      }
+
+      // 检查是否完成拼图
+      function checkWin() {
+        for (let i = 0; i < puzzleArray.length - 1; i++) {
+          if (puzzleArray[i] !== i) {
+            return false;
+          }
+        }
+        // 拼图完成，显示成功消息
+        successMessage.classList.remove('hidden');
+        return true;
+      }
+
+      // 事件监听
+      shuffleButton.addEventListener('click', shufflePuzzle);
+      upButton.addEventListener('click', () => moveEmpty('up'));
+      downButton.addEventListener('click', () => moveEmpty('down'));
+      leftButton.addEventListener('click', () => moveEmpty('left'));
+      rightButton.addEventListener('click', () => moveEmpty('right'));
+      playAgainButton.addEventListener('click', () => {
+        initializePuzzle();
+        shufflePuzzle();
+      });
+
+      // 键盘控制
+      document.addEventListener('keydown', (e) => {
+        switch (e.key) {
+          case 'ArrowUp':
+            moveEmpty('up');
+            e.preventDefault();
+            break;
+          case 'ArrowDown':
+            moveEmpty('down');
+            e.preventDefault();
+            break;
+          case 'ArrowLeft':
+            moveEmpty('left');
+            e.preventDefault();
+            break;
+          case 'ArrowRight':
+            moveEmpty('right');
+            e.preventDefault();
+            break;
+        }
+      });
+
+      // 初始化游戏
+      initializePuzzle();
+      shufflePuzzle();
+    });
+  </script>
 </body>
 
 </html>
