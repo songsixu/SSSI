@@ -3,170 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卡通小猫拼图游戏</title>
+    <title>猜数字小游戏</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f0f9f0;
-            margin: 0;
-            padding: 20px;
             font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
         }
-        h1 {
-            color: #5aae61;
-            margin-bottom: 10px;
+        .game-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        #puzzle-container {
-            width: 400px;
-            height: 400px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            background-color: #ddd;
-            padding: 5px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-        }
-        .puzzle-piece {
-            background-image: url('https://s21.ax1x.com/2025/08/07/pVaFZp6.jpg');
-            background-size: 400px 400px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .puzzle-piece:hover {
-            transform: scale(1.05);
-        }
-        .empty-piece {
-            background-color: #ccebc5;
-        }
-        #reference-img {
+        #guessInput {
+            padding: 10px;
             width: 200px;
-            height: 200px;
-            margin-top: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            font-size: 16px;
+            margin-right: 10px;
         }
-        .control-btn {
-            margin: 5px;
-            padding: 8px 16px;
-            background-color: #5aae61;
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-        .control-btn:hover {
-            background-color: #4d9d53;
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .info {
+            background-color: #d9edf7;
+            color: #31708f;
+        }
+        .history {
+            margin-top: 20px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <h1>卡通小猫拼图游戏</h1>
-    <div id="puzzle-container"></div>
-    < img id="reference-img" src="https://s21.ax1x.com/2025/08/07/pVaFZp6.jpg" alt="完整小猫参考图">
-    <div>
-        <button class="control-btn" id="btn-up">上</button>
-        <button class="control-btn" id="btn-down">下</button>
-        <button class="control-btn" id="btn-left">左</button>
-        <button class="control-btn" id="btn-right">右</button>
-        <button class="control-btn" id="btn-shuffle">重新打乱</button>
+    <div class="game-container">
+        <h1>猜数字小游戏</h1>
+        <p>我已经想好了一个1-100之间的数字，你有10次机会猜出它！</p >
+        
+        <input type="number" id="guessInput" min="1" max="100" placeholder="输入你的猜测">
+        <button onclick="checkGuess()">提交猜测</button>
+        
+        <p>剩余次数: <span id="remaining">10</span></p >
+        
+        <div id="message" class="message info">请开始你的第一次猜测</div>
+        
+        <div class="history">
+            <h3>猜测历史:</h3>
+            <ul id="historyList"></ul>
+        </div>
     </div>
 
     <script>
-        const container = document.getElementById('puzzle-container');
-        const referenceImg = document.getElementById('reference-img');
-        const btnUp = document.getElementById('btn-up');
-        const btnDown = document.getElementById('btn-down');
-        const btnLeft = document.getElementById('btn-left');
-        const btnRight = document.getElementById('btn-right');
-        const btnShuffle = document.getElementById('btn-shuffle');
+        // 生成1-100的随机数
+        let secretNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+        const maxAttempts = 10;
 
-        const size = 4;
-        let puzzle = [];
-        let emptyIndex = 15;
+        function checkGuess() {
+            const guessInput = document.getElementById('guessInput');
+            const guess = parseInt(guessInput.value);
+            const messageElement = document.getElementById('message');
+            const remainingElement = document.getElementById('remaining');
+            const historyList = document.getElementById('historyList');
 
-        // 初始化拼图并自动打乱
-        function initAndShuffle() {
-            puzzle = Array.from({ length: size * size }, (_, i) => i);
-            renderPuzzle();
-            // 页面加载后立即打乱
-            shufflePuzzle();
-        }
-
-        function renderPuzzle() {
-            container.innerHTML = '';
-            puzzle.forEach((index, i) => {
-                const piece = document.createElement('div');
-                piece.className = `puzzle-piece ${i === emptyIndex ? 'empty-piece' : ''}`;
-                if (i !== emptyIndex) {
-                    const row = Math.floor(index / size);
-                    const col = index % size;
-                    piece.style.backgroundPosition = `${-col * 100}px ${-row * 100}px`;
-                }
-                container.appendChild(piece);
-            });
-        }
-
-        function swapPieces(index1, index2) {
-            [puzzle[index1], puzzle[index2]] = [puzzle[index2], puzzle[index1]];
-            emptyIndex = index2;
-            renderPuzzle();
-            checkWin();
-        }
-
-        function moveEmpty(direction) {
-            const row = Math.floor(emptyIndex / size);
-            const col = emptyIndex % size;
-            let targetIndex;
-            if (direction === 'up' && row > 0) targetIndex = emptyIndex - size;
-            else if (direction === 'down' && row < size - 1) targetIndex = emptyIndex + size;
-            else if (direction === 'left' && col > 0) targetIndex = emptyIndex - 1;
-            else if (direction === 'right' && col < size - 1) targetIndex = emptyIndex + 1;
-            
-            if (targetIndex !== undefined) swapPieces(emptyIndex, targetIndex);
-        }
-
-        function shufflePuzzle() {
-            // 增加打乱次数，让拼图更乱
-            for (let i = 0; i < 300; i++) {
-                const dirs = ['up', 'down', 'left', 'right'];
-                moveEmpty(dirs[Math.floor(Math.random() * dirs.length)]);
+            // 验证输入
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                messageElement.textContent = "请输入1-100之间的有效数字！";
+                messageElement.className = "message error";
+                return;
             }
-        }
 
-        function checkWin() {
-            if (puzzle.every((val, i) => val === i)) {
-                alert('太棒啦！小猫拼图拼好啦～');
-                initAndShuffle(); // 完成后自动重新打乱
+            attempts++;
+            guessInput.value = '';
+
+            // 记录猜测历史
+            const listItem = document.createElement('li');
+            listItem.textContent = `第${attempts}次: 你猜的是${guess}`;
+            historyList.appendChild(listItem);
+
+            // 判断猜测结果
+            if (guess === secretNumber) {
+                messageElement.textContent = `恭喜你！猜对了！答案就是${secretNumber}，你用了${attempts}次`;
+                messageElement.className = "message success";
+                guessInput.disabled = true;
+                document.querySelector('button').disabled = true;
+            } else if (attempts >= maxAttempts) {
+                messageElement.textContent = `游戏结束！你已经用完了所有${maxAttempts}次机会，正确答案是${secretNumber}`;
+                messageElement.className = "message error";
+                guessInput.disabled = true;
+                document.querySelector('button').disabled = true;
+            } else if (guess < secretNumber) {
+                messageElement.textContent = "太小了！再试试更大的数字";
+                messageElement.className = "message info";
+            } else {
+                messageElement.textContent = "太大了！再试试更小的数字";
+                messageElement.className = "message info";
             }
+
+            // 更新剩余次数
+            remainingElement.textContent = maxAttempts - attempts;
         }
 
-        // 绑定按钮事件
-        btnUp.addEventListener('click', () => moveEmpty('up'));
-        btnDown.addEventListener('click', () => moveEmpty('down'));
-        btnLeft.addEventListener('click', () => moveEmpty('left'));
-        btnRight.addEventListener('click', () => moveEmpty('right'));
-        btnShuffle.addEventListener('click', shufflePuzzle);
-        
-        // 点击拼图块移动
-        container.addEventListener('click', (e) => {
-            const index = Array.from(container.children).indexOf(e.target);
-            if (index !== -1 && index !== emptyIndex) {
-                const [r1, c1] = [Math.floor(index / size), index % size];
-                const [r2, c2] = [Math.floor(emptyIndex / size), emptyIndex % size];
-                if (Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1) {
-                    swapPieces(index, emptyIndex);
-                }
+        // 按回车键也能提交猜测
+        document.getElementById('guessInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
             }
         });
-
-        // 页面加载完成后初始化并自动打乱
-        window.onload = initAndShuffle;
     </script>
 </body>
 </html>
+
