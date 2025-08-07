@@ -1,324 +1,195 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>卡通小猫拼图游戏</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <!-- 配置 Tailwind 自定义主题 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#FF9EBB',
-            secondary: '#B6E388',
-            accent: '#89CFF0',
-            neutral: '#FFF9E6',
-          },
-          fontFamily: {
-            cute: ['"Comic Sans MS"', '"Marker Felt"', 'sans-serif'],
-          },
-        },
-      }
-    }
-  </script>
-
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-
-      .puzzle-shadow {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      }
-
-      .btn-bounce {
-        transition: transform 0.15s ease;
-      }
-
-      .btn-bounce:active {
-        transform: scale(0.95);
-      }
-
-      .piece-transition {
-        transition: all 0.2s ease-out;
-      }
-
-      /* 增大拼图容器基础尺寸，适配不同设备时也更大 */
-      #puzzle-container {
-        min-width: 320px;
-        min-height: 320px;
-        max-width: 600px;
-        max-height: 600px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卡通小猫拼图游戏</title>
+    <style>
+        /* 整体布局样式 - 浅绿色调 */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f9f0; /* 浅绿色背景 */
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #5aae61; /* 浅绿色标题 */
+            margin-bottom: 10px;
+        }
+        /* 拼图容器样式 - 放大尺寸（400x400） */
+        #puzzle-container {
+            width: 400px;
+            height: 400px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            background-color: #ddd;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        /* 拼图块样式 - 使用你的图片 */
+        .puzzle-piece {
+            background-image: url('https://ftp.mioz.cn/test/2025/08/07/1754550728.JPG'); /* 替换为你的图片地址 */
+            background-size: 400px 400px; /* 与容器尺寸匹配，保证比例正确 */
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .puzzle-piece:hover {
+            transform: scale(1.05);
+        }
+        /* 空白块样式 */
+        .empty-piece {
+            background-color: #ccebc5; /* 浅绿色空白块 */
+        }
+        /* 参考图样式 - 放大显示 */
+        #reference-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover; /* 保持图片比例，避免拉伸 */
+            margin-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        /* 按钮样式 - 浅绿色 */
+        .control-btn {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #5aae61; /* 浅绿色按钮 */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .control-btn:hover {
+            background-color: #4d9d53; /* 深一点的浅绿色 hover 效果 */
+        }
+    </style>
 </head>
-
-<body class="bg-gradient-to-br from-neutral to-primary/20 min-h-screen font-cute text-gray-800">
-  <div class="container mx-auto px-4 py-8 max-w-4xl">
-    <!-- 游戏标题 -->
-    <header class="text-center mb-8">
-      <h1 class="text-[clamp(2.5rem,6vw,4rem)] font-bold text-primary drop-shadow-lg">
-        <<<i class="fa fa-paw mr-2"></</</i>卡通小猫拼图
-      </h1>
-      <p class="text-gray-600 mt-2 text-lg">把小猫的图片拼完整吧！</p >
-    </header>
-
-    <!-- 游戏区域 -->
-    <div class="flex flex-col lg:flex-row gap-8 items-center lg:items-start justify-center">
-      <!-- 拼图容器 -->
-      <div class="relative">
-        <!-- 拼图完成时的提示 -->
-        <div id="success-message" class="hidden absolute inset-0 bg-white/90 rounded-lg flex flex-col items-center justify-center z-10 border-4 border-secondary">
-          <<<i class="fa fa-check-circle text-6xl text-secondary mb-4"></</</i>
-          <h2 class="text-2xl font-bold text-primary mb-2">太棒了！</h2>
-          <p class="mb-6">你成功拼好了小猫拼图！</p >
-          <button id="play-again" class="bg-primary hover:bg-primary/80 text-white px-6 py-3 rounded-full font-bold btn-bounce">
-            再玩一次
-          </button>
-        </div>
-
-        <!-- 拼图网格 -->
-        <div id="puzzle-container" class="grid grid-cols-4 gap-2 bg-gray-200 p-2 rounded-lg puzzle-shadow relative">
-          <!-- 拼图块将通过 JavaScript 动态生成 -->
-        </div>
-
-        <!-- 原始图片预览 -->
-        <div class="mt-6 bg-white p-3 rounded shadow-md w-full max-w-[300px] mx-auto">
-          <p class="text-center text-base mb-1 font-semibold">参考图：</p >
-          < img src="https://example.com/your-cat-image.jpg" alt="完整的小猫图片" class="w-full mx-auto rounded">
-        </div>
-      </div>
-
-      <!-- 控制区域 -->
-      <div class="bg-white rounded-xl p-6 puzzle-shadow w-full lg:w-auto flex flex-col items-center">
-        <h2 class="text-xl font-bold text-primary mb-4">移动控制</h2>
-
-        <!-- 控制按钮 -->
-        <div class="grid grid-cols-3 gap-3 w-[200px]">
-          <div class="col-start-2">
-            <button id="up" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
-              ↑
-            </button>
-          </div>
-          <div class="col-start-1 row-start-2">
-            <button id="left" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
-              ←
-            </button>
-          </div>
-          <div class="col-start-2 row-start-2">
-            <button id="down" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
-              ↓
-            </button>
-          </div>
-          <div class="col-start-3 row-start-2">
-            <button id="right" class="w-full bg-accent hover:bg-accent/80 text-white p-3 rounded-full font-bold btn-bounce text-xl">
-              →
-            </button>
-          </div>
-        </div>
-
-        <button id="shuffle" class="mt-6 bg-secondary hover:bg-secondary/80 text-white px-6 py-3 rounded-full font-bold btn-bounce w-full text-lg">
-          <<<i class="fa fa-random mr-2"></</</i>打乱拼图
-        </button>
-
-        <div class="mt-6 text-center">
-          <p class="text-gray-600 mb-2">提示：</p >
-          <ul class="text-sm text-left text-gray-600 space-y-1">
-            <li>• 点击方向键移动空白块</li>
-            <li>• 也可以使用键盘方向键</li>
-            <li>• 拼出完整的小猫图片</li>
-          </ul>
-        </div>
-      </div>
+<body>
+    <h1>卡通小猫拼图游戏</h1>
+    <div id="puzzle-container"></div>
+    <!-- 参考图使用你的图片 -->
+    < img id="reference-img" src="https://ftp.mioz.cn/test/2025/08/07/1754550728.JPG" alt="完整小猫参考图">
+    <div>
+        <button class="control-btn" id="btn-up">上</button>
+        <button class="control-btn" id="btn-down">下</button>
+        <button class="control-btn" id="btn-left">左</button>
+        <button class="control-btn" id="btn-right">右</button>
+        <button class="control-btn" id="btn-shuffle">打乱</button>
     </div>
 
-    <!-- 页脚 -->
-    <footer class="mt-12 text-center text-gray-500 text-sm">
-      <p>卡通小猫拼图游戏 &copy; 2023</p >
-    </footer>
-  </div>
+    <script>
+        const container = document.getElementById('puzzle-container');
+        const referenceImg = document.getElementById('reference-img');
+        const btnUp = document.getElementById('btn-up');
+        const btnDown = document.getElementById('btn-down');
+        const btnLeft = document.getElementById('btn-left');
+        const btnRight = document.getElementById('btn-right');
+        const btnShuffle = document.getElementById('btn-shuffle');
 
-  <script>
-    // 拼图游戏逻辑
-    document.addEventListener('DOMContentLoaded', () => {
-      const puzzleContainer = document.getElementById('puzzle-container');
-      const shuffleButton = document.getElementById('shuffle');
-      const upButton = document.getElementById('up');
-      const downButton = document.getElementById('down');
-      const leftButton = document.getElementById('left');
-      const rightButton = document.getElementById('right');
-      const successMessage = document.getElementById('success-message');
-      const playAgainButton = document.getElementById('play-again');
+        // 拼图尺寸（4x4）
+        const size = 4;
+        // 存储拼图数据
+        let puzzle = [];
+        // 空白块索引
+        let emptyIndex = 15; 
 
-      // 拼图尺寸 (4x4)
-      const SIZE = 4;
-      // 存储拼图数据的数组
-      let puzzleArray = [];
-      // 空白块的位置
-      let emptyIndex = SIZE * SIZE - 1;
+        // 初始化拼图（按顺序排列）
+        function initPuzzle() {
+            puzzle = Array.from({ length: size * size }, (_, i) => i);
+            renderPuzzle();
+        }
 
-      // 替换为你实际的小猫图片地址，这里用示例占位，你可替换成真实可访问的图片链接
-      const catImageUrl = 'https://example.com/your-cat-image.jpg'; 
+        // 渲染拼图到页面
+        function renderPuzzle() {
+            container.innerHTML = '';
+            puzzle.forEach((index, i) => {
+                const piece = document.createElement('div');
+                piece.className = `puzzle-piece ${i === emptyIndex ? 'empty-piece' : ''}`;
+                if (i !== emptyIndex) {
+                    // 计算背景位置，保证图片正确切割显示
+                    const row = Math.floor(index / size);
+                    const col = index % size;
+                    piece.style.backgroundPosition = `${-col * 100}px ${-row * 100}px`;
+                }
+                container.appendChild(piece);
+            });
+        }
 
-      // 初始化拼图
-      function initializePuzzle() {
-        // 创建有序的拼图数组
-        puzzleArray = Array.from({ length: SIZE * SIZE }, (_, i) => i);
-        renderPuzzle();
-      }
+        // 交换拼图块位置
+        function swapPieces(index1, index2) {
+            [puzzle[index1], puzzle[index2]] = [puzzle[index2], puzzle[index1]];
+            emptyIndex = index2;
+            renderPuzzle();
+            checkWin();
+        }
 
-      // 渲染拼图
-      function renderPuzzle() {
-        puzzleContainer.innerHTML = '';
+        // 移动空白块（上下左右）
+        function moveEmpty(direction) {
+            const row = Math.floor(emptyIndex / size);
+            const col = emptyIndex % size;
+            let targetIndex;
+            if (direction === 'up' && row > 0) {
+                targetIndex = emptyIndex - size;
+            } else if (direction === 'down' && row < size - 1) {
+                targetIndex = emptyIndex + size;
+            } else if (direction === 'left' && col > 0) {
+                targetIndex = emptyIndex - 1;
+            } else if (direction === 'right' && col < size - 1) {
+                targetIndex = emptyIndex + 1;
+            }
+            if (targetIndex !== undefined) {
+                swapPieces(emptyIndex, targetIndex);
+            }
+        }
 
-        puzzleArray.forEach((value, index) => {
-          const piece = document.createElement('div');
-          const pieceSize = 100 / (SIZE - 0.1) + '%'; 
+        // 打乱拼图（随机移动空白块多次）
+        function shufflePuzzle() {
+            for (let i = 0; i < 100; i++) {
+                const directions = ['up', 'down', 'left', 'right'];
+                const randomDir = directions[Math.floor(Math.random() * directions.length)];
+                moveEmpty(randomDir);
+            }
+        }
 
-          piece.className = `piece-transition rounded-sm cursor-pointer flex items-center justify-center`;
-          piece.style.width = pieceSize;
-          piece.style.height = pieceSize;
+        // 检查是否拼图完成
+        function checkWin() {
+            const isWin = puzzle.every((val, i) => val === i);
+            if (isWin) {
+                alert('恭喜！成功拼好小猫拼图啦！');
+                initPuzzle(); // 完成后重置游戏
+            }
+        }
 
-          // 空白块
-          if (value === SIZE * SIZE - 1) {
-            piece.classList.add('bg-gray-200');
-            piece.dataset.index = index;
-          } else {
-            // 计算每个拼图块的背景位置
-            const row = Math.floor(value / SIZE);
-            const col = value % SIZE;
-            const xPos = -col * 100;
-            const yPos = -row * 100;
-
-            piece.classList.add('puzzle-shadow');
-            piece.style.backgroundImage = `url(${catImageUrl})`;
-            piece.style.backgroundSize = `${SIZE * 100}% ${SIZE * 100}%`;
-            piece.style.backgroundPosition = `${xPos}% ${yPos}%`;
-            piece.dataset.value = value;
-            piece.dataset.index = index;
-
-            // 点击拼图块移动
-            piece.addEventListener('click', () => movePiece(index));
-          }
-
-          puzzleContainer.appendChild(piece);
+        // 事件绑定
+        btnUp.addEventListener('click', () => moveEmpty('up'));
+        btnDown.addEventListener('click', () => moveEmpty('down'));
+        btnLeft.addEventListener('click', () => moveEmpty('left'));
+        btnRight.addEventListener('click', () => moveEmpty('right'));
+        btnShuffle.addEventListener('click', shufflePuzzle);
+        container.addEventListener('click', (e) => {
+            const index = Array.from(container.children).indexOf(e.target);
+            if (index !== -1 && index !== emptyIndex) {
+                const row = Math.floor(index / size);
+                const col = index % size;
+                const emptyRow = Math.floor(emptyIndex / size);
+                const emptyCol = emptyIndex % size;
+                // 判断是否相邻（上下左右）
+                if (Math.abs(row - emptyRow) + Math.abs(col - emptyCol) === 1) {
+                    swapPieces(index, emptyIndex);
+                }
+            }
         });
-      }
 
-      // 移动拼图块
-      function movePiece(index) {
-        const emptyRow = Math.floor(emptyIndex / SIZE);
-        const emptyCol = emptyIndex % SIZE;
-        const pieceRow = Math.floor(index / SIZE);
-        const pieceCol = index % SIZE;
-
-        // 检查是否相邻（上下左右）
-        if ((Math.abs(emptyRow - pieceRow) === 1 && emptyCol === pieceCol) || (Math.abs(emptyCol - pieceCol) === 1 && emptyRow === pieceRow)) {
-          // 交换位置
-          [puzzleArray[emptyIndex], puzzleArray[index]] = [puzzleArray[index], puzzleArray[emptyIndex]];
-          emptyIndex = index;
-          renderPuzzle();
-          checkWin();
-        }
-      }
-
-      // 移动空白块（根据方向）
-      function moveEmpty(direction) {
-        const row = Math.floor(emptyIndex / SIZE);
-        const col = emptyIndex % SIZE;
-        let newIndex;
-
-        switch (direction) {
-          case 'up':
-            if (row > 0) newIndex = emptyIndex - SIZE;
-            break;
-          case 'down':
-            if (row < SIZE - 1) newIndex = emptyIndex + SIZE;
-            break;
-          case 'left':
-            if (col > 0) newIndex = emptyIndex - 1;
-            break;
-          case 'right':
-            if (col < SIZE - 1) newIndex = emptyIndex + 1;
-            break;
-        }
-
-        if (newIndex !== undefined) {
-          movePiece(newIndex);
-        }
-      }
-
-      // 打乱拼图
-      function shufflePuzzle() {
-        // 打乱拼图（确保可解）
-        let shuffles = 1000;
-        while (shuffles--) {
-          const directions = ['up', 'down', 'left', 'right'];
-          const randomDir = directions[Math.floor(Math.random() * directions.length)];
-          moveEmpty(randomDir);
-        }
-
-        // 隐藏成功消息（如果显示）
-        successMessage.classList.add('hidden');
-      }
-
-      // 检查是否完成拼图
-      function checkWin() {
-        for (let i = 0; i < puzzleArray.length - 1; i++) {
-          if (puzzleArray[i] !== i) {
-            return false;
-          }
-        }
-        // 拼图完成，显示成功消息
-        successMessage.classList.remove('hidden');
-        return true;
-      }
-
-      // 事件监听
-      shuffleButton.addEventListener('click', shufflePuzzle);
-      upButton.addEventListener('click', () => moveEmpty('up'));
-      downButton.addEventListener('click', () => moveEmpty('down'));
-      leftButton.addEventListener('click', () => moveEmpty('left'));
-      rightButton.addEventListener('click', () => moveEmpty('right'));
-      playAgainButton.addEventListener('click', () => {
-        initializePuzzle();
-        shufflePuzzle();
-      });
-
-      // 键盘控制
-      document.addEventListener('keydown', (e) => {
-        switch (e.key) {
-          case 'ArrowUp':
-            moveEmpty('up');
-            e.preventDefault();
-            break;
-          case 'ArrowDown':
-            moveEmpty('down');
-            e.preventDefault();
-            break;
-          case 'ArrowLeft':
-            moveEmpty('left');
-            e.preventDefault();
-            break;
-          case 'ArrowRight':
-            moveEmpty('right');
-            e.preventDefault();
-            break;
-        }
-      });
-
-      // 初始化游戏
-      initializePuzzle();
-      shufflePuzzle();
-    });
-  </script>
+        // 初始化游戏
+        initPuzzle();
+    </script>
 </body>
-
 </html>
